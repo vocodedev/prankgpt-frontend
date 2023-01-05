@@ -94,6 +94,17 @@ const PhoneVerification = () => {
   const [verified, setVerified] = React.useState(false);
 
   React.useEffect(() => {
+    const pollIsVerified = async (phoneNumber: string) => {
+      let verified = false;
+      while (!verified) {
+        verified = await isCallerIdVerified(phoneNumber);
+        if (verified) {
+          setVerified(true);
+        }
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+      }
+    };
+
     if (phoneNumber) {
       isCallerIdVerified(phoneNumber).then((verified) => {
         if (verified) {
@@ -103,6 +114,7 @@ const PhoneVerification = () => {
           sendCallerIdValidation(phoneNumber).then((code) => {
             setIsCallerIdVerification(true);
             setVerificationCode(code);
+            pollIsVerified(phoneNumber);
           });
         }
       });
