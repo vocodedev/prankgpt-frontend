@@ -1,14 +1,11 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from "react-router-dom";
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-import Login from './components/Login';
-import PhoneVerification from './components/PhoneVerification';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import reportWebVitals from "./reportWebVitals";
+import Login from "./components/Login";
+import PhoneVerification from "./components/PhoneVerification";
+import Chats from "./components/Chats";
+import "./index.css";
 
 const router = createBrowserRouter([
   {
@@ -18,11 +15,15 @@ const router = createBrowserRouter([
   {
     path: "/verify",
     element: <PhoneVerification />,
-  }
+  },
+  {
+    path: "/chats",
+    element: <Chats />,
+  },
 ]);
 
 const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
+  document.getElementById("root") as HTMLElement
 );
 root.render(
   <React.StrictMode>
