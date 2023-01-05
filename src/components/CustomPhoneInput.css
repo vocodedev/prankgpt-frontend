@@ -1,24 +1,24 @@
 .custom-phone-input {
-    display: flex;
-    align-items: center;
-  }
-  
-  .custom-phone-input__input {
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    padding: 8px 12px;
-    font-size: 16px;
-    outline: none;
-    width: 100%;
-  }
-  
-  .custom-phone-input__country-select {
-    border: 1px solid #ccc;
-    border-radius: 4px 0 0 4px;
-    background-color: #fff;
-    padding: 8px 12px;
-    font-size: 16px;
-    outline: none;
-    cursor: pointer;
-  }
+  display: flex;
+  align-items: center;
+}
+
+.custom-phone-input > input {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 8px 12px;
+  font-size: 16px;
+  outline: none;
+  width: 100%;
+}
+
+.custom-phone-input > * > select {
+  border: 1px solid #ccc;
+  border-radius: 4px 0 0 4px;
+  background-color: #fff;
+  padding: 8px 12px;
+  font-size: 16px;
+  outline: none;
+  cursor: pointer;
+}
   

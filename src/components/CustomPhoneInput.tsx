@@ -1,9 +1,10 @@
 import React from "react";
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
+import "./CustomPhoneInput.css"
 
 interface CustomPhoneInputProps {
-  defaultCountry?: string;
+  defaultCountry?: any;
   onChange: (value: string) => void;
   value: string;
 }
