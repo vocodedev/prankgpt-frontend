@@ -1,5 +1,12 @@
-import { Box, Center, Container, HStack } from "@chakra-ui/layout";
-import { PinInput, PinInputField } from "@chakra-ui/react";
+import {
+  Box,
+  Center,
+  Container,
+  HStack,
+  Text,
+  VStack,
+} from "@chakra-ui/layout";
+import { PinInput, PinInputField, Button } from "@chakra-ui/react";
 import React from "react";
 import { useSearchParams } from "react-router-dom";
 import ErrorPage from "./ErrorPage";
@@ -84,6 +91,7 @@ const PhoneVerification = () => {
   const [isCallerIdVerification, setIsCallerIdVerification] =
     React.useState(false);
   const [isNormalVerification, setIsNormalVerification] = React.useState(false);
+  const [verified, setVerified] = React.useState(false);
 
   React.useEffect(() => {
     if (phoneNumber) {
@@ -111,20 +119,48 @@ const PhoneVerification = () => {
     fontSize: "30px",
   };
 
+  const isReadOnly = isCallerIdVerification;
+
+  const setVerificationCodeAndMaybeSubmit = (code: string) => {
+    setVerificationCode(code);
+    if (code.length === 6) {
+      verifyPhoneNumber(phoneNumber, verificationCode).then((verified) =>
+        setVerified(verified)
+      );
+    }
+  };
+
   return (
     <div className="code">
       <Container flex="1">
         <Center h="100vh">
-          <Box>
+          <VStack>
+            {isCallerIdVerification && (
+              <Text>
+                You'll receive a call, please enter the number displayed below
+              </Text>
+            )}
+            {isNormalVerification && (
+              <Text>Enter the code we've just texted you.</Text>
+            )}
             <HStack>
-              <PinInput otp size="lg">
+              <PinInput
+                value={verificationCode}
+                onChange={setVerificationCodeAndMaybeSubmit}
+                isDisabled={isReadOnly}
+                otp
+                size="lg"
+              >
+                <PinInputField style={pinInputStyles} />
+                <PinInputField style={pinInputStyles} />
                 <PinInputField style={pinInputStyles} />
                 <PinInputField style={pinInputStyles} />
                 <PinInputField style={pinInputStyles} />
                 <PinInputField style={pinInputStyles} />
               </PinInput>
             </HStack>
-          </Box>
+            {verified && <Text>Verified!</Text>}
+          </VStack>
         </Center>
       </Container>
     </div>
