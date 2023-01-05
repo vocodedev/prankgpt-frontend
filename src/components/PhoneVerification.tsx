@@ -1,4 +1,5 @@
-import { Box } from "@chakra-ui/layout";
+import { Box, Center, Container, HStack } from "@chakra-ui/layout";
+import { PinInput, PinInputField } from "@chakra-ui/react";
 import React from "react";
 import { useSearchParams } from "react-router-dom";
 import ErrorPage from "./ErrorPage";
@@ -102,10 +103,31 @@ const PhoneVerification = () => {
 
   if (!phoneNumber) return <ErrorPage />;
 
+  const pinInputStyles = {
+    textAlign: "center" as const,
+    height: "60px",
+    width: "40px",
+    marginRight: "4px",
+    fontSize: "30px",
+  };
+
   return (
-    <Box>
-      <p>Phone Number: {phoneNumber}</p>
-    </Box>
+    <div className="code">
+      <Container flex="1">
+        <Center h="100vh">
+          <Box>
+            <HStack>
+              <PinInput otp size="lg">
+                <PinInputField style={pinInputStyles} />
+                <PinInputField style={pinInputStyles} />
+                <PinInputField style={pinInputStyles} />
+                <PinInputField style={pinInputStyles} />
+              </PinInput>
+            </HStack>
+          </Box>
+        </Center>
+      </Container>
+    </div>
   );
 };
 

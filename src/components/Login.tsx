@@ -1,7 +1,7 @@
 import CustomPhoneInput from "./CustomPhoneInput";
 import React from "react";
 import { createSearchParams, useNavigate } from "react-router-dom";
-import { Center, Container, Heading, HStack } from "@chakra-ui/layout";
+import { Box, Center, Container, Heading, HStack } from "@chakra-ui/layout";
 
 const Login: React.FC = ({}) => {
   const [phoneNumber, setPhoneNumber] = React.useState("");
