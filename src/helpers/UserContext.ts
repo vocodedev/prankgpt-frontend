@@ -1,6 +1,14 @@
 import React from "react";
 
-const defaultUserContext = {
+type UserContextType = {
+  user: {
+    id: string;
+    phoneNumber: string;
+  } | null;
+  setUser: (user: any) => void;
+};
+
+const defaultUserContext: UserContextType = {
   user: null,
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   setUser: (user: any) => {},

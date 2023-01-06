@@ -32,7 +32,7 @@ const Main: React.FC<MainProps> = () => {
   const [prompt, setPrompt] = React.useState("");
   const [isChatLive, setIsChatLive] = React.useState(false);
 
-  function initiateCall(to: string, from: string, prompt: string): void {
+  const initiateCall = (to: string, from: string, prompt: string): void => {
     /*
     if any fields are empty, flag them 
     and return
@@ -47,9 +47,27 @@ const Main: React.FC<MainProps> = () => {
       alert("Please fill out all fields");
       return;
     }
-    navigate("chat/J4vCPQiew7oAvsELSYzc");
-    // setIsChatLive(!isChatLive);
-  }
+    if (!user) return;
+    fetch(
+      `https://${process.env.REACT_APP_BACKEND_URL}/initiate_chat/${user.id}`,
+      {
+        method: "POST",
+        body: JSON.stringify({
+          to,
+          from,
+          prompt,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        const chatId = data.chat_id;
+        navigate(`/chat/${chatId}`);
+      });
+  };
 
   return (
     <VStack>
