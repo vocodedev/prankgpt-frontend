@@ -4,7 +4,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import reportWebVitals from "./reportWebVitals";
 import Login from "./components/Login";
 import PhoneVerification from "./components/PhoneVerification";
-import Chats from "./components/Chats";
+import Chat from "./components/Chat";
 import "./index.css";
 
 const router = createBrowserRouter([
@@ -17,8 +17,8 @@ const router = createBrowserRouter([
     element: <PhoneVerification />,
   },
   {
-    path: "/chats",
-    element: <Chats />,
+    path: "/chat/:chatId",
+    element: <Chat />,
   },
 ]);
 
