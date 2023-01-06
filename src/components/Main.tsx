@@ -1,5 +1,13 @@
 import React from "react";
-import { Box, Button, Text, VStack, Textarea, Center } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Text,
+  VStack,
+  Textarea,
+  Center,
+  Checkbox,
+} from "@chakra-ui/react";
 import CustomPhoneInput from "./CustomPhoneInput";
 import LiveChat from "./LiveChat";
 import { useNavigate } from "react-router-dom";
@@ -67,6 +75,12 @@ const Main: React.FC<MainProps> = () => {
         padding={"10px"}
         onChange={(text) => setPrompt(text.target.value)}
       />
+      <Text fontSize="20px" padding="10px">
+        3. Do you want to call using your number or remain anonymous?
+      </Text>
+      <Checkbox defaultChecked={false} size="lg">
+        Remain anonymous
+      </Checkbox>
       <Box padding="10px" width="100%">
         <Center>
           <Button
@@ -76,7 +90,7 @@ const Main: React.FC<MainProps> = () => {
             colorScheme="blue"
             onClick={() => initiateCall(receiverPhoneNumber, " ", prompt)}
           >
-            Prank!
+            Start call!
           </Button>
         </Center>
       </Box>
