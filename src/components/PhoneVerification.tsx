@@ -84,7 +84,7 @@ const verifyPhoneNumber = async (
   return data.status;
 };
 
-const getOrCreateUser = async (phoneNumber: string): Promise<Object> => {
+const getOrCreateUser = async (phoneNumber: string): Promise<object> => {
   return await fetch(
     `https://${process.env.REACT_APP_BACKEND_URL}/get_or_create_user`,
     {

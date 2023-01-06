@@ -3,12 +3,11 @@ import React from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Login from "./components/Login";
 import PhoneVerification from "./components/PhoneVerification";
-import Chat from "./components/Chat";
 import "./index.css";
 import { ChakraProvider } from "@chakra-ui/react";
 import Main from "./components/Main";
-import { UserContext } from "./helpers/UserContext";
 import UserProvider from "./components/UserProvider";
+import LiveChat from "./components/LiveChat";
 
 const router = createBrowserRouter([
   {
@@ -25,7 +24,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/chat/:chatId",
-    element: <Chat />,
+    element: <LiveChat />,
   },
 ]);
 
