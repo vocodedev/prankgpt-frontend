@@ -8,7 +8,8 @@ import {
 } from "@chakra-ui/layout";
 import { PinInput, PinInputField, Button } from "@chakra-ui/react";
 import React from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { UserContext } from "../helpers/UserContext";
 import ErrorPage from "./ErrorPage";
 
 const isCallerIdVerified = async (phoneNumber: string): Promise<boolean> => {
@@ -83,7 +84,30 @@ const verifyPhoneNumber = async (
   return data.status;
 };
 
+const getOrCreateUser = async (phoneNumber: string): Promise<Object> => {
+  return await fetch(
+    `https://${process.env.REACT_APP_BACKEND_URL}/get_or_create_user`,
+    {
+      method: "POST",
+      body: JSON.stringify({
+        phone_number: phoneNumber,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  ).then((response) => response.json());
+};
+
 const PhoneVerification = () => {
+  const { user, setUser } = React.useContext(UserContext);
+  const navigate = useNavigate();
+  React.useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, [user]);
+
   const [searchParams] = useSearchParams();
   const phoneNumber = searchParams.get("phoneNumber");
 
@@ -91,7 +115,14 @@ const PhoneVerification = () => {
   const [isCallerIdVerification, setIsCallerIdVerification] =
     React.useState(false);
   const [isNormalVerification, setIsNormalVerification] = React.useState(false);
-  const [verified, setVerified] = React.useState(false);
+
+  const onVerified = () => {
+    if (phoneNumber) {
+      getOrCreateUser(phoneNumber).then((user) => {
+        setUser(user);
+      });
+    }
+  };
 
   React.useEffect(() => {
     const pollIsVerified = async (phoneNumber: string) => {
@@ -99,7 +130,7 @@ const PhoneVerification = () => {
       while (!verified) {
         verified = await isCallerIdVerified(phoneNumber);
         if (verified) {
-          setVerified(true);
+          onVerified();
         }
         await new Promise((resolve) => setTimeout(resolve, 1000));
       }
@@ -137,7 +168,7 @@ const PhoneVerification = () => {
     setVerificationCode(code);
     if (code.length === 6) {
       verifyPhoneNumber(phoneNumber, verificationCode).then((verified) =>
-        setVerified(verified)
+        onVerified()
       );
     }
   };
@@ -149,7 +180,8 @@ const PhoneVerification = () => {
           <VStack>
             {isCallerIdVerification && (
               <Text>
-                You'll receive a call, please enter the number displayed below
+                You'll receive a call. When prompted, please enter the number
+                displayed below.
               </Text>
             )}
             {isNormalVerification && (
@@ -171,7 +203,6 @@ const PhoneVerification = () => {
                 <PinInputField style={pinInputStyles} />
               </PinInput>
             </HStack>
-            {verified && <Text>Verified!</Text>}
           </VStack>
         </Center>
       </Container>

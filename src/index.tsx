@@ -1,41 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import Login from "./components/Login";
-import PhoneVerification from "./components/PhoneVerification";
-import Chat from "./components/Chat";
-import "./index.css";
-import { ChakraProvider } from "@chakra-ui/react";
-import Main from "./components/Main";
-
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Main />,
-  },
-  {
-    path: "/login",
-    element: <Login />,
-  },
-  {
-    path: "/verify",
-    element: <PhoneVerification />,
-  },
-  {
-    path: "/chat/:chatId",
-    element: <Chat />,
-  },
-]);
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <ChakraProvider>
-      <RouterProvider router={router} />
-    </ChakraProvider>
+    <App />
   </React.StrictMode>
 );
 
