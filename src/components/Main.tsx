@@ -27,8 +27,14 @@ const Main: React.FC<MainProps> = () => {
 
   const [receiverPhoneNumber, setReceiverPhoneNumber] = React.useState("");
   const [prompt, setPrompt] = React.useState("");
+  const [anonymous, setAnonymous] = React.useState(false);
 
-  const initiateCall = (to: string, from: string, prompt: string): void => {
+  const initiateCall = (
+    to: string,
+    from: string,
+    prompt: string,
+    anonymous: boolean
+  ): void => {
     if (from === "" || prompt === "") {
       alert("Please fill out all fields");
       return;
@@ -42,6 +48,7 @@ const Main: React.FC<MainProps> = () => {
           to,
           from,
           prompt,
+          anonymous,
         }),
         headers: {
           "Content-Type": "application/json",
@@ -82,7 +89,13 @@ const Main: React.FC<MainProps> = () => {
       <Text fontSize="20px" padding="10px">
         3. Do you want to call using your number or remain anonymous?
       </Text>
-      <Checkbox defaultChecked={false} size="lg">
+      <Checkbox
+        defaultChecked={false}
+        size="lg"
+        onChange={() => {
+          setAnonymous(!anonymous);
+        }}
+      >
         Remain anonymous
       </Checkbox>
       <Box padding="10px" width="100%">
@@ -94,7 +107,12 @@ const Main: React.FC<MainProps> = () => {
             colorScheme="blue"
             onClick={() =>
               // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-              initiateCall(receiverPhoneNumber, user!.phoneNumber, prompt)
+              initiateCall(
+                receiverPhoneNumber,
+                user!.phoneNumber,
+                prompt,
+                anonymous
+              )
             }
           >
             Start call!
