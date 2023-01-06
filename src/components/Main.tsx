@@ -47,7 +47,7 @@ const Main: React.FC<MainProps> = () => {
       alert("Please fill out all fields");
       return;
     }
-    navigate("/chat/1");
+    navigate("chat/J4vCPQiew7oAvsELSYzc");
     // setIsChatLive(!isChatLive);
   }
 
