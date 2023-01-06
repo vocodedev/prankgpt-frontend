@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Text, Button, VStack, HStack } from "@chakra-ui/react";
+import { Box, Text, Button, VStack, HStack, Flex } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useMessages } from "../hooks/useMessages";
@@ -26,11 +26,39 @@ const LiveChat: React.FC<LiveChatProps> = () => {
           const sender: string = message["sender"];
           const parsedMessage: string = message["message"];
 
-          return (
-            <Text>
-              {sender.toLowerCase()}: {parsedMessage.toLowerCase()}
-            </Text>
-          );
+          if (sender === "PHONE") {
+            return (
+              <Flex w="100%">
+                <Flex
+                  bg="gray.100"
+                  color="black"
+                  maxW="350px"
+                  my="1"
+                  mx="1"
+                  p="3"
+                  borderRadius={"xl"}
+                >
+                  <Text>{parsedMessage.toLowerCase()}</Text>
+                </Flex>
+              </Flex>
+            );
+          } else {
+            return (
+              <Flex w="100%" justify="flex-end">
+                <Flex
+                  bg="blue.100"
+                  color="black"
+                  maxW="350px"
+                  my="1"
+                  mx="1"
+                  p="3"
+                  borderRadius={"xl"}
+                >
+                  <Text>{parsedMessage.toLowerCase()}</Text>
+                </Flex>
+              </Flex>
+            );
+          }
         })}
       </Box>
       <HStack>
