@@ -1,6 +1,5 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Box, Text, Button, VStack, HStack } from "@chakra-ui/react";
-import { getMessages } from "../helpers/ChatHelpers";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useMessages } from "../hooks/useMessages";
@@ -8,9 +7,8 @@ import { useMessages } from "../hooks/useMessages";
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface LiveChatProps {}
 
-export interface Message {
-  message: string;
-  sender: string;
+function capitalizeFirstLetter(val: string) {
+  return val.charAt(0).toUpperCase() + val.slice(1);
 }
 
 const LiveChat: React.FC<LiveChatProps> = () => {
@@ -24,14 +22,13 @@ const LiveChat: React.FC<LiveChatProps> = () => {
         Prank GPT
       </Text>
       <Box width={"50%"} minHeight={"50vh"} borderWidth="1px" borderRadius="xl">
-        {messages.map((message, i) => {
-          // let parsedMessage = JSON.parse(message.message).message;
-          // let sender = JSON.parse(message.message).sender;
+        {messages.map((message) => {
+          const sender: string = message["sender"];
+          const parsedMessage: string = message["message"];
 
           return (
             <Text>
-              {JSON.stringify(message)}
-              {/* {message.sender}: {message.message} */}
+              {sender.toLowerCase()}: {parsedMessage.toLowerCase()}
             </Text>
           );
         })}

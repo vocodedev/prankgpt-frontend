@@ -9,40 +9,26 @@ import {
   Checkbox,
 } from "@chakra-ui/react";
 import CustomPhoneInput from "./CustomPhoneInput";
-import LiveChat from "./LiveChat";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../helpers/UserContext";
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface MainProps {}
 
-const URL = "https://28aa-174-160-87-247.ngrok.io";
-
 const Main: React.FC<MainProps> = () => {
   const { user } = React.useContext(UserContext);
   const navigate = useNavigate();
 
-  // React.useEffect(() => {
-  //   if (!user) {
-  //     navigate("/login");
-  //   }
-  // }, [user]);
+  React.useEffect(() => {
+    if (!user) {
+      navigate("/login");
+    }
+  }, [user]);
 
   const [receiverPhoneNumber, setReceiverPhoneNumber] = React.useState("");
   const [prompt, setPrompt] = React.useState("");
-  const [isChatLive, setIsChatLive] = React.useState(false);
 
   const initiateCall = (to: string, from: string, prompt: string): void => {
-    /*
-    if any fields are empty, flag them 
-    and return
-
-    if the user is not verified, 
-    make them verify their phone number
-
-    once verified, trigger the call
-
-    */
     if (from === "" || prompt === "") {
       alert("Please fill out all fields");
       return;
@@ -106,7 +92,10 @@ const Main: React.FC<MainProps> = () => {
             minWidth={"225px"}
             padding="10px"
             colorScheme="blue"
-            onClick={() => initiateCall(receiverPhoneNumber, " ", prompt)}
+            onClick={() =>
+              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+              initiateCall(receiverPhoneNumber, user!.phoneNumber, prompt)
+            }
           >
             Start call!
           </Button>
