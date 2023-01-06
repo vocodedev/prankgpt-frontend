@@ -6,10 +6,16 @@ import Login from "./components/Login";
 import PhoneVerification from "./components/PhoneVerification";
 import Chat from "./components/Chat";
 import "./index.css";
+import { ChakraProvider } from "@chakra-ui/react";
+import Main from "./components/Main";
 
 const router = createBrowserRouter([
   {
     path: "/",
+    element: <Main />,
+  },
+  {
+    path: "/login",
     element: <Login />,
   },
   {
@@ -27,7 +33,9 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <ChakraProvider>
+      <RouterProvider router={router} />
+    </ChakraProvider>
   </React.StrictMode>
 );
 
