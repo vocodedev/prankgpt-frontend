@@ -19,12 +19,6 @@ const Main: React.FC<MainProps> = () => {
   const { user } = React.useContext(UserContext);
   const navigate = useNavigate();
 
-  React.useEffect(() => {
-    if (!user) {
-      navigate("/login");
-    }
-  }, [user]);
-
   const [receiverPhoneNumber, setReceiverPhoneNumber] = React.useState("");
   const [prompt, setPrompt] = React.useState("");
   const [anonymous, setAnonymous] = React.useState(false);
@@ -65,7 +59,7 @@ const Main: React.FC<MainProps> = () => {
   return (
     <VStack>
       <Text as="b" fontSize="70px" padding={"3%"}>
-        Prank GPT
+        PrankGPT
       </Text>
       <Text fontSize="20px" padding="10px">
         1. Enter the phone number of the person you want to prank

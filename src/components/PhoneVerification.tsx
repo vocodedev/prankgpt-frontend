@@ -167,8 +167,8 @@ const PhoneVerification = () => {
   const setVerificationCodeAndMaybeSubmit = (code: string) => {
     setVerificationCode(code);
     if (code.length === 6) {
-      verifyPhoneNumber(phoneNumber, verificationCode).then((verified) =>
-        onVerified()
+      verifyPhoneNumber(phoneNumber, verificationCode).then(
+        (verified) => verified && onVerified()
       );
     }
   };

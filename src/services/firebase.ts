@@ -5,6 +5,8 @@ import {
   query,
   collection,
   orderBy,
+  doc,
+  getDoc,
 } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -15,7 +17,10 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-export const getMessages = (chatId, callback) => {
+export const getMessages = (
+  chatId: string,
+  callback: (messages: any) => void
+) => {
   return onSnapshot(
     query(
       collection(db, "chats", chatId, "messages"),
@@ -29,4 +34,14 @@ export const getMessages = (chatId, callback) => {
       callback(messages);
     }
   );
+};
+
+export const getChatMetadata = (
+  chatId: string,
+  callback: (chat: any) => void
+) => {
+  const chatDocRef = doc(db, "chats", chatId);
+  return onSnapshot(chatDocRef, (doc) => {
+    callback({ ...doc.data(), id: doc.id });
+  });
 };

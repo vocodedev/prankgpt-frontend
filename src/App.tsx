@@ -8,11 +8,16 @@ import { ChakraProvider } from "@chakra-ui/react";
 import Main from "./components/Main";
 import UserProvider from "./components/UserProvider";
 import LiveChat from "./components/LiveChat";
+import UserAuthenticated from "./components/UserAuthenticated";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Main />,
+    element: (
+      <UserAuthenticated>
+        <Main />
+      </UserAuthenticated>
+    ),
   },
   {
     path: "/login",
@@ -24,7 +29,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/chat/:chatId",
-    element: <LiveChat />,
+    element: (
+      <UserAuthenticated>
+        <LiveChat />
+      </UserAuthenticated>
+    ),
   },
 ]);
 
