@@ -8,7 +8,5 @@ Tomorrow:
 - [] voicemail
 - [x] show ringing status
 
-deploy
-
-- [x] frontend
-- [] backend
+- [x] deploy frontend
+- [] deploy backend
