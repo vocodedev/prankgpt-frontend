@@ -33,6 +33,9 @@ const Main: React.FC<MainProps> = () => {
       alert("Please fill out all fields");
       return;
     }
+    if (from === to && !anonymous) {
+      alert("If you're going to call yourself, please check the anonymous box");
+    }
     if (!user) return;
     fetch(
       `https://${process.env.REACT_APP_BACKEND_URL}/initiate_chat/${user.id}`,
@@ -49,7 +52,15 @@ const Main: React.FC<MainProps> = () => {
         },
       }
     )
-      .then((response) => response.json())
+      .then(async (response) => {
+        if (response.ok) {
+          return await response.json();
+        } else {
+          const data = await response.json();
+          alert(data.error);
+          throw new Error(data.error);
+        }
+      })
       .then((data) => {
         const chatId = data.chat_id;
         navigate(`/chat/${chatId}`);
