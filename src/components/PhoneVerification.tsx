@@ -81,7 +81,7 @@ const verifyPhoneNumber = async (
     }
   );
   const data = await response.json();
-  return data.status;
+  return data.status === "approved";
 };
 
 const getOrCreateUser = async (phoneNumber: string): Promise<object> => {
@@ -164,46 +164,47 @@ const PhoneVerification = () => {
 
   const isReadOnly = isCallerIdVerification;
 
-  const setVerificationCodeAndMaybeSubmit = (code: string) => {
-    setVerificationCode(code);
-    if (code.length === 6) {
-      verifyPhoneNumber(phoneNumber, verificationCode).then(
-        (verified) => verified && onVerified()
-      );
-    }
+  const onSubmit = (event: any) => {
+    event.preventDefault();
+    verifyPhoneNumber(phoneNumber, verificationCode).then(
+      (verified) => verified && onVerified()
+    );
   };
 
   return (
     <div className="code">
       <Container flex="1">
         <Center h="100vh">
-          <VStack>
-            {isCallerIdVerification && (
-              <Text>
-                You'll receive a call. When prompted, please enter the number
-                displayed below.
-              </Text>
-            )}
-            {isNormalVerification && (
-              <Text>Enter the code we've just texted you.</Text>
-            )}
-            <HStack>
-              <PinInput
-                value={verificationCode}
-                onChange={setVerificationCodeAndMaybeSubmit}
-                isDisabled={isReadOnly}
-                otp
-                size="lg"
-              >
-                <PinInputField style={pinInputStyles} />
-                <PinInputField style={pinInputStyles} />
-                <PinInputField style={pinInputStyles} />
-                <PinInputField style={pinInputStyles} />
-                <PinInputField style={pinInputStyles} />
-                <PinInputField style={pinInputStyles} />
-              </PinInput>
-            </HStack>
-          </VStack>
+          <form onSubmit={onSubmit}>
+            <VStack>
+              {isCallerIdVerification && (
+                <Text>
+                  You'll receive a call. When prompted, please enter the number
+                  displayed below.
+                </Text>
+              )}
+              {isNormalVerification && (
+                <Text>Enter the code we've just texted you.</Text>
+              )}
+              <HStack>
+                <PinInput
+                  value={verificationCode}
+                  onChange={setVerificationCode}
+                  isDisabled={isReadOnly}
+                  otp
+                  size="lg"
+                >
+                  <PinInputField style={pinInputStyles} />
+                  <PinInputField style={pinInputStyles} />
+                  <PinInputField style={pinInputStyles} />
+                  <PinInputField style={pinInputStyles} />
+                  <PinInputField style={pinInputStyles} />
+                  <PinInputField style={pinInputStyles} />
+                </PinInput>
+              </HStack>
+              <Button type="submit">Submit</Button>
+            </VStack>
+          </form>
         </Center>
       </Container>
     </div>
