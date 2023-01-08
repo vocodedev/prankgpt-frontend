@@ -164,8 +164,12 @@ const PhoneVerification = () => {
 
   const isReadOnly = isCallerIdVerification;
 
-  const onSubmit = (event: any) => {
+  const onFormSubmit = (event: any) => {
     event.preventDefault();
+    onSubmit();
+  };
+
+  const onSubmit = () => {
     verifyPhoneNumber(phoneNumber, verificationCode).then(
       (verified) => verified && onVerified()
     );
@@ -175,7 +179,7 @@ const PhoneVerification = () => {
     <div className="code">
       <Container flex="1">
         <Center h="100vh">
-          <form onSubmit={onSubmit}>
+          <form onSubmit={onFormSubmit}>
             <VStack>
               {isCallerIdVerification && (
                 <Text>
