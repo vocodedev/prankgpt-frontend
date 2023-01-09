@@ -206,7 +206,7 @@ const PhoneVerification = () => {
                   <PinInputField style={pinInputStyles} />
                 </PinInput>
               </HStack>
-              <Button type="submit">Submit</Button>
+              {isNormalVerification && <Button type="submit">Submit</Button>}
             </VStack>
           </form>
         </Center>
