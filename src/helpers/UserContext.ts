@@ -1,10 +1,12 @@
 import React from "react";
 
+export type UserType = {
+  id: string;
+  phoneNumber: string;
+};
+
 type UserContextType = {
-  user: {
-    id: string;
-    phoneNumber: string;
-  } | null;
+  user: UserType | null;
   setUser: (user: any) => void;
 };
 

@@ -1,39 +1,36 @@
-import CustomPhoneInput from "./CustomPhoneInput";
 import React from "react";
 import { createSearchParams, useNavigate } from "react-router-dom";
-import { Center, HStack, VStack, Text } from "@chakra-ui/layout";
-import { Button } from "@chakra-ui/react";
+import LoginForm from "./LoginForm";
+import PhoneVerification from "./PhoneVerification";
 
-const Login: React.FC = ({}) => {
+const Login = ({ onLogin }: { onLogin: () => void }) => {
   const [phoneNumber, setPhoneNumber] = React.useState("");
+  const [verified, setVerified] = React.useState(false);
+  const [showVerificationScreen, setShowVerificationScreen] =
+    React.useState(false);
   const navigate = useNavigate();
 
-  const onSubmit = () => {
-    navigate(`/verify?${createSearchParams({ phoneNumber })}`);
-  };
+  React.useEffect(() => {
+    if (verified) {
+      onLogin();
+    }
+  }, [verified]);
 
-  return (
-    <VStack>
-      <Text as="b" fontSize="70px" padding={"3%"}>
-        PrankGPT
-      </Text>
+  const onLoginFormSubmit = () => setShowVerificationScreen(true);
 
-      <Text fontSize="20px" padding="10px">
-        Verify your phone number to start using PrankGPT!
-      </Text>
-
-      <form onSubmit={onSubmit}>
-        <HStack>
-          <CustomPhoneInput
-            onChange={setPhoneNumber}
-            value={phoneNumber}
-            defaultCountry={"US"}
-          />
-          <Button type="submit">Enter</Button>
-        </HStack>
-      </form>
-    </VStack>
-  );
+  if (showVerificationScreen) {
+    return (
+      <PhoneVerification phoneNumber={phoneNumber} setVerified={setVerified} />
+    );
+  } else {
+    return (
+      <LoginForm
+        phoneNumber={phoneNumber}
+        setPhoneNumber={setPhoneNumber}
+        onSubmit={onLoginFormSubmit}
+      />
+    );
+  }
 };
 
 export default Login;

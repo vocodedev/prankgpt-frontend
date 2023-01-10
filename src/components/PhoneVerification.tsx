@@ -99,17 +99,14 @@ const getOrCreateUser = async (phoneNumber: string): Promise<object> => {
   ).then((response) => response.json());
 };
 
-const PhoneVerification = () => {
-  const { user, setUser } = React.useContext(UserContext);
-  const navigate = useNavigate();
-  React.useEffect(() => {
-    if (user) {
-      navigate("/");
-    }
-  }, [user]);
-
-  const [searchParams] = useSearchParams();
-  const phoneNumber = searchParams.get("phoneNumber");
+const PhoneVerification = ({
+  phoneNumber,
+  setVerified,
+}: {
+  phoneNumber: string;
+  setVerified: (verified: boolean) => void;
+}) => {
+  const { setUser } = React.useContext(UserContext);
 
   const [verificationCode, setVerificationCode] = React.useState("");
   const [isCallerIdVerification, setIsCallerIdVerification] =
@@ -121,6 +118,7 @@ const PhoneVerification = () => {
       getOrCreateUser(phoneNumber).then((user) => {
         setUser(user);
       });
+      setVerified(true);
     }
   };
 

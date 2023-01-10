@@ -16,14 +16,6 @@ const router = createBrowserRouter([
     element: <Main />,
   },
   {
-    path: "/login",
-    element: <Login />,
-  },
-  {
-    path: "/verify",
-    element: <PhoneVerification />,
-  },
-  {
     path: "/chat/:chatId",
     element: <LiveChat />,
   },
