@@ -25,20 +25,24 @@ const Main: React.FC<MainProps> = () => {
 
   const initiateCall = (
     to: string,
-    from: string,
+    from: string | undefined,
     prompt: string,
     anonymous: boolean
   ): void => {
-    if (from === "" || prompt === "") {
+    if (!from && !anonymous) {
+      navigate("/login");
+      return;
+    }
+    if (to === "" || prompt === "") {
       alert("Please fill out all fields");
       return;
     }
     if (from === to && !anonymous) {
       alert("If you're going to call yourself, please check the anonymous box");
     }
-    if (!user) return;
+    const userId = user?.id || "anonymous";
     fetch(
-      `https://${process.env.REACT_APP_BACKEND_URL}/initiate_chat/${user.id}`,
+      `https://${process.env.REACT_APP_BACKEND_URL}/initiate_chat/${userId}`,
       {
         method: "POST",
         body: JSON.stringify({
@@ -114,7 +118,7 @@ const Main: React.FC<MainProps> = () => {
               // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
               initiateCall(
                 receiverPhoneNumber,
-                user!.phoneNumber,
+                user?.phoneNumber,
                 prompt,
                 anonymous
               )

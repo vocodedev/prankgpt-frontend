@@ -13,11 +13,7 @@ import UserAuthenticated from "./components/UserAuthenticated";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: (
-      <UserAuthenticated>
-        <Main />
-      </UserAuthenticated>
-    ),
+    element: <Main />,
   },
   {
     path: "/login",
@@ -29,11 +25,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/chat/:chatId",
-    element: (
-      <UserAuthenticated>
-        <LiveChat />
-      </UserAuthenticated>
-    ),
+    element: <LiveChat />,
   },
 ]);
 

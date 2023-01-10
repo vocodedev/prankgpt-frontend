@@ -13,3 +13,10 @@ Tomorrow:
 - [x] fix initial lag
 - [x] remove submit from phone verification
 - [] figure out backend ec2 instance pricing
+
+Bugs:
+
+- [] verification code cache doesn't work
+- [] response to initial hello is slow
+- [x] phone verification / user onboarding breaks because of firebase DocumentReference
+- [] start on Main screen and then authenticate if not anonymous

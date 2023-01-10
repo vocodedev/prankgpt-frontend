@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Box,
   Text,
@@ -15,15 +15,27 @@ import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useChatMetadata, useMessages } from "../hooks/firebaseHooks";
 import { timestampToString } from "../helpers/ChatHelpers";
+import { UserContext } from "../helpers/UserContext";
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface LiveChatProps {}
 
 const LiveChat: React.FC<LiveChatProps> = () => {
   const { chatId } = useParams();
+  const { user } = React.useContext(UserContext);
   const messages = useMessages(chatId!);
   const chatMetadata = useChatMetadata(chatId!);
   const navigate = useNavigate();
+  const [authenticated, setAuthenticated] = React.useState(false);
+
+  useEffect(() => {
+    const userId = user?.id || "anonymous";
+    if (chatMetadata && chatMetadata["user"] !== userId) {
+      navigate("/");
+    } else if (chatMetadata && chatMetadata["user"] === userId) {
+      setAuthenticated(true);
+    }
+  });
 
   const endCall = () => {
     if (chatMetadata && chatMetadata["active"]) {
@@ -42,7 +54,9 @@ const LiveChat: React.FC<LiveChatProps> = () => {
   const ringing =
     messages.length === 0 && (!chatMetadata || chatMetadata["active"]);
 
-  return (
+  return !authenticated ? (
+    <></>
+  ) : (
     <VStack width="100%">
       <Text as="b" fontSize="70px" padding={"3%"}>
         PrankGPT
