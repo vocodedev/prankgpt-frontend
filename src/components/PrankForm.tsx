@@ -86,7 +86,7 @@ const PrankForm = ({
         2. Enter a prompt to instruct the AI with what to say.
       </Text>
       <Textarea
-        placeholder="Enter a prompt"
+        placeholder="e.g. tell Ajay that he's been accepted to Hogwarts"
         width={"40%"}
         minWidth={"300px"}
         height={"150px"}
