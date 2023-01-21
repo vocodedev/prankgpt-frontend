@@ -12,7 +12,6 @@ import {
   ModalBody,
   ModalContent,
 } from "@chakra-ui/react";
-import CustomPhoneInput from "./CustomPhoneInput";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../helpers/UserContext";
 import PrankForm, { InitiateChatResponse } from "./PrankForm";

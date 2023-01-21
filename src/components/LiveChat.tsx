@@ -17,10 +17,7 @@ import { useChatMetadata, useMessages } from "../hooks/firebaseHooks";
 import { timestampToString } from "../helpers/ChatHelpers";
 import { UserContext } from "../helpers/UserContext";
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface LiveChatProps {}
-
-const LiveChat: React.FC<LiveChatProps> = () => {
+const LiveChat: React.FC = () => {
   const { chatId } = useParams();
   const { user } = React.useContext(UserContext);
   const messages = useMessages(chatId!);
@@ -121,6 +118,24 @@ const LiveChat: React.FC<LiveChatProps> = () => {
                         <Text fontStyle="italic">{parsedMessage}</Text>
                       </VStack>
                     );
+                  } else if (sender === "USER") {
+                    return (
+                      <Flex w="100%" justify="flex-end">
+                        <Flex
+                          bg="green.100"
+                          color="black"
+                          maxW="350px"
+                          my="1"
+                          mx="1"
+                          p="3"
+                          borderRadius={"xl"}
+                        >
+                          <Text>{parsedMessage.toLowerCase()}</Text>
+                        </Flex>
+                      </Flex>
+                    );
+                  } else {
+                    return <></>;
                   }
                 })}
               </>

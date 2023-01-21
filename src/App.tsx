@@ -1,14 +1,10 @@
-import React from "react";
-
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Login from "./components/Login";
-import PhoneVerification from "./components/PhoneVerification";
 import "./index.css";
-import { ChakraProvider } from "@chakra-ui/react";
+import { ChakraProvider, ColorModeProvider } from "@chakra-ui/react";
 import Main from "./components/Main";
 import UserProvider from "./components/UserProvider";
 import LiveChat from "./components/LiveChat";
-import UserAuthenticated from "./components/UserAuthenticated";
+import DarkModeProvider from "./components/DarkModeProvider";
 
 const router = createBrowserRouter([
   {
@@ -24,9 +20,13 @@ const router = createBrowserRouter([
 const App = () => {
   return (
     <ChakraProvider>
-      <UserProvider>
-        <RouterProvider router={router} />
-      </UserProvider>
+      <ColorModeProvider>
+        <DarkModeProvider>
+          <UserProvider>
+            <RouterProvider router={router} />
+          </UserProvider>
+        </DarkModeProvider>
+      </ColorModeProvider>
     </ChakraProvider>
   );
 };

@@ -13,11 +13,15 @@ Tomorrow:
 - [x] fix initial lag
 - [x] remove submit from phone verification
 - [] figure out backend ec2 instance pricing
+- [] add chat
+- [] stop talking if human cuts off Marv
+- [] handoff chat
+- [x] automatically hang up on bye
 
 Bugs:
 
 - [] verification code cache doesn't work
-- [] response to initial hello is slow
+- [x] response to initial hello is slow
 - [x] phone verification / user onboarding breaks because of firebase DocumentReference
 - [x] start on Main screen and then authenticate if not anonymous
 
