@@ -11,7 +11,7 @@ const DarkModeProvider = (props: any) => {
   return (
     <>
       <header>
-        <Flex p={5} w="90%" align={"right"} justify={"flex-end"}>
+        <Flex p={2} w="90%" align={"right"} justify={"flex-end"}>
           <FormControl display="flex" alignItems="center">
             <FormLabel htmlFor="email-alerts" mb="0">
               {colorMode}
