@@ -138,9 +138,11 @@ const LiveChat: React.FC = () => {
             {chatMetadata && chatMetadata["active"] && (
               <Button onClick={endCall}>End Call</Button>
             )}
-            {chatMetadata && chatMetadata["active"] && (
-              <Button onClick={transferCall}>Transfer Call</Button>
-            )}
+            {chatMetadata &&
+              chatMetadata["active"] &&
+              chatMetadata["user"] !== "anonymous" && (
+                <Button onClick={transferCall}>Transfer Call</Button>
+              )}
             {chatMetadata && chatMetadata["recordingUrl"] && (
               <Button>
                 <Link href={chatMetadata["recordingUrl"]}>View recording</Link>
