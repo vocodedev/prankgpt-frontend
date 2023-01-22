@@ -12,8 +12,8 @@ Tomorrow:
 - [] set up backend firewall
 - [x] fix initial lag
 - [x] remove submit from phone verification
-- [] figure out backend ec2 instance pricing
-- [] add chat
+- [x] figure out backend ec2 instance pricing
+- [x] add chat
 - [] stop talking if human cuts off Marv
 - [] handoff chat
 - [x] automatically hang up on bye
@@ -45,3 +45,11 @@ core infra:
     - like tortoise-TTS: https://github.com/metavoicexyz/tortoise-tts
 
   - we also need to limit the response length or chunk the output text into sentences. it takes a while to synthesize the full response.
+
+  on transferring calls:
+
+  - you can transfer to another twilio number with a set response since it immediately picks up, but you can't transfer to a number easily
+  - you need to do what's known as a _warm transfer_: https://www.twilio.com/docs/voice/tutorials/warm-transfer/python
+  - basically, somehow get everyone (including the phone number to transfer to) in a <Conference> and then hang up
+  - but this is so hard since you have to create conferences from TwiML in Python at least
+  - we got somewhere by async creating the conferences, it does seem to actually work a bit — still feel like you need to add someone to the conference somehow
