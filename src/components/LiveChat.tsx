@@ -122,7 +122,7 @@ const LiveChat: React.FC = () => {
                     Call has ended
                   </Text>
                 )}
-                {chatMetadata && (
+                {chatMetadata && chatMetadata["active"] && (
                   <Box
                     width="100%"
                     borderBottomRadius="xl"
