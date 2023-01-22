@@ -25,6 +25,7 @@ const LiveChat: React.FC = () => {
   const chatMetadata = useChatMetadata(chatId!);
   const navigate = useNavigate();
   const [authenticated, setAuthenticated] = React.useState(false);
+  const [initiatedConference, setInitiatedConference] = React.useState(false);
   const { colorMode } = useColorMode();
 
   useEffect(() => {
@@ -52,6 +53,7 @@ const LiveChat: React.FC = () => {
 
   const createConference = () => {
     if (chatMetadata && chatMetadata["active"]) {
+      setInitiatedConference(true);
       fetch(
         `https://${process.env.REACT_APP_BACKEND_URL}/create_conference/${chatMetadata["id"]}`,
         {
@@ -156,8 +158,14 @@ const LiveChat: React.FC = () => {
             )}
             {chatMetadata &&
               chatMetadata["active"] &&
-              chatMetadata["user"] !== "anonymous" && (
-                <Button onClick={createConference}>Create conference</Button>
+              chatMetadata["user"] !== "anonymous" &&
+              !chatMetadata["readyForConference"] && (
+                <Button
+                  disabled={initiatedConference}
+                  onClick={createConference}
+                >
+                  Create conference
+                </Button>
               )}
             {chatMetadata &&
               chatMetadata["active"] &&

@@ -176,7 +176,7 @@ const PhoneVerification = ({
   return (
     <div className="code">
       <Container flex="1">
-        <Center h="100vh">
+        <Center>
           <form onSubmit={onFormSubmit}>
             <VStack>
               {isCallerIdVerification && (
