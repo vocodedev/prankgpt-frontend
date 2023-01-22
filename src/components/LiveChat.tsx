@@ -9,6 +9,9 @@ import {
   Link,
   Spacer,
   useColorMode,
+  FormControl,
+  Switch,
+  FormLabel,
 } from "@chakra-ui/react";
 import { PhoneIcon } from "@chakra-ui/icons";
 import { useParams } from "react-router-dom";
@@ -91,7 +94,29 @@ const LiveChat: React.FC = () => {
         {
           method: "POST",
           body: JSON.stringify({
-            message: message,
+            message,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const data = await response.json();
+      return data["success"] === true;
+    }
+    return false;
+  };
+
+  const setUseGpt3Response = async (
+    useGpt3Response: boolean
+  ): Promise<boolean> => {
+    if (chatMetadata && chatMetadata["active"]) {
+      const response = await fetch(
+        `https://${process.env.REACT_APP_BACKEND_URL}/set_use_gpt3_response/${chatMetadata["id"]}`,
+        {
+          method: "POST",
+          body: JSON.stringify({
+            useGpt3Response,
           }),
           headers: {
             "Content-Type": "application/json",
@@ -122,35 +147,52 @@ const LiveChat: React.FC = () => {
       ) : (
         <>
           <Flex width="100%" justifyContent={"center"}>
-            <Box
-              width={"50%"}
-              minHeight={"50vh"}
-              borderWidth="1px"
-              borderRadius="xl"
-            >
-              <VStack height="100%" width="100%" spacing={0}>
-                <>
-                  {messages.map((message) => (
-                    <ChatMessage message={message} />
-                  ))}
-                </>
-                <Spacer />
-                {chatMetadata && chatMetadata["active"] === false && (
-                  <Text paddingBottom={2} fontStyle="italic">
-                    Call has ended
-                  </Text>
-                )}
-                {chatMetadata && chatMetadata["active"] && (
-                  <Box
-                    width="100%"
-                    borderBottomRadius="xl"
-                    bg={colorMode === "dark" ? "gray.700" : "gray.100"}
-                  >
-                    <MessageInput onSubmit={sendMessage} />
+            <VStack width="100%">
+              {chatMetadata &&
+                chatMetadata["active"] &&
+                chatMetadata["useGpt3Response"] !== undefined && (
+                  <Box>
+                    <FormControl display="flex" alignItems="center">
+                      <FormLabel mb="0">Respond with GPT-3</FormLabel>
+                      <Switch
+                        onChange={(event) =>
+                          setUseGpt3Response(event.target.checked)
+                        }
+                        isChecked={chatMetadata["useGpt3Response"]}
+                      />
+                    </FormControl>
                   </Box>
                 )}
-              </VStack>
-            </Box>
+              <Box
+                width={"50%"}
+                minHeight={"50vh"}
+                borderWidth="1px"
+                borderRadius="xl"
+              >
+                <VStack height="100%" width="100%" spacing={0}>
+                  <>
+                    {messages.map((message) => (
+                      <ChatMessage message={message} />
+                    ))}
+                  </>
+                  <Spacer />
+                  {chatMetadata && chatMetadata["active"] === false && (
+                    <Text paddingBottom={2} fontStyle="italic">
+                      Call has ended
+                    </Text>
+                  )}
+                  {chatMetadata && chatMetadata["active"] && (
+                    <Box
+                      width="100%"
+                      borderBottomRadius="xl"
+                      bg={colorMode === "dark" ? "gray.700" : "gray.100"}
+                    >
+                      <MessageInput onSubmit={sendMessage} />
+                    </Box>
+                  )}
+                </VStack>
+              </Box>
+            </VStack>
           </Flex>
           <HStack>
             {chatMetadata && chatMetadata["active"] && (
