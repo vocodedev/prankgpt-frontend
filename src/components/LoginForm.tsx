@@ -16,10 +16,6 @@ const LoginForm: React.FC<LoginFormProps> = ({
 }) => {
   return (
     <VStack paddingBottom="40px">
-      <Text as="b" fontSize="70px" padding={"3%"}>
-        PrankGPT
-      </Text>
-
       <Text fontSize="20px" padding="10px">
         Verify your phone number to start using PrankGPT!
       </Text>
