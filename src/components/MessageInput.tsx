@@ -27,7 +27,7 @@ const MessageInput = ({
 
   return (
     <form onSubmit={onFormSubmit}>
-      <HStack bg="gray.100">
+      <HStack>
         <Input
           variant="unstyled"
           padding={2}

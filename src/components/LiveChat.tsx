@@ -8,12 +8,12 @@ import {
   Flex,
   Link,
   Spacer,
+  useColorMode,
 } from "@chakra-ui/react";
 import { PhoneIcon } from "@chakra-ui/icons";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useChatMetadata, useMessages } from "../hooks/firebaseHooks";
-import { timestampToString } from "../helpers/ChatHelpers";
 import { UserContext } from "../helpers/UserContext";
 import MessageInput from "./MessageInput";
 import ChatMessage from "./ChatMessage";
@@ -25,6 +25,7 @@ const LiveChat: React.FC = () => {
   const chatMetadata = useChatMetadata(chatId!);
   const navigate = useNavigate();
   const [authenticated, setAuthenticated] = React.useState(false);
+  const { colorMode } = useColorMode();
 
   useEffect(() => {
     const userId = user?.id || "anonymous";
@@ -46,6 +47,22 @@ const LiveChat: React.FC = () => {
           },
         }
       ).then((response) => response.json());
+    }
+  };
+
+  const transferCall = () => {
+    if (chatMetadata && chatMetadata["active"]) {
+      fetch(
+        `https://${process.env.REACT_APP_BACKEND_URL}/transfer_call/${chatMetadata["id"]}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+        .then((response) => response.json())
+        .catch((error) => alert(error));
     }
   };
 
@@ -105,8 +122,12 @@ const LiveChat: React.FC = () => {
                     Call has ended
                   </Text>
                 )}
-                {chatMetadata && chatMetadata["active"] && (
-                  <Box width="100%">
+                {chatMetadata && (
+                  <Box
+                    width="100%"
+                    borderBottomRadius="xl"
+                    bg={colorMode === "dark" ? "gray.700" : "gray.100"}
+                  >
                     <MessageInput onSubmit={sendMessage} />
                   </Box>
                 )}
@@ -116,6 +137,9 @@ const LiveChat: React.FC = () => {
           <HStack>
             {chatMetadata && chatMetadata["active"] && (
               <Button onClick={endCall}>End Call</Button>
+            )}
+            {chatMetadata && chatMetadata["active"] && (
+              <Button onClick={transferCall}>Transfer Call</Button>
             )}
             {chatMetadata && chatMetadata["recordingUrl"] && (
               <Button>
