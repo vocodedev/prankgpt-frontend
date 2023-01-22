@@ -7,8 +7,7 @@ import {
   HStack,
   Flex,
   Link,
-  Center,
-  Spinner,
+  Spacer,
 } from "@chakra-ui/react";
 import { PhoneIcon } from "@chakra-ui/icons";
 import { useParams } from "react-router-dom";
@@ -16,6 +15,8 @@ import { useNavigate } from "react-router-dom";
 import { useChatMetadata, useMessages } from "../hooks/firebaseHooks";
 import { timestampToString } from "../helpers/ChatHelpers";
 import { UserContext } from "../helpers/UserContext";
+import MessageInput from "./MessageInput";
+import ChatMessage from "./ChatMessage";
 
 const LiveChat: React.FC = () => {
   const { chatId } = useParams();
@@ -48,6 +49,26 @@ const LiveChat: React.FC = () => {
     }
   };
 
+  const sendMessage = async (message: string): Promise<boolean> => {
+    if (chatMetadata && chatMetadata["active"]) {
+      const response = await fetch(
+        `https://${process.env.REACT_APP_BACKEND_URL}/send_message/${chatMetadata["id"]}`,
+        {
+          method: "POST",
+          body: JSON.stringify({
+            message: message,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const data = await response.json();
+      return data["success"] === true;
+    }
+    return false;
+  };
+
   const ringing =
     messages.length === 0 && (!chatMetadata || chatMetadata["active"]);
 
@@ -65,85 +86,33 @@ const LiveChat: React.FC = () => {
         </HStack>
       ) : (
         <>
-          <Box
-            width={"50%"}
-            minHeight={"50vh"}
-            borderWidth="1px"
-            borderRadius="xl"
-          >
-            <VStack>
-              <>
-                {messages.map((message) => {
-                  const sender: string = message["sender"];
-                  const parsedMessage: string = message["message"];
-
-                  if (sender === "PHONE") {
-                    return (
-                      <Flex w="100%">
-                        <Flex
-                          bg="gray.100"
-                          color="black"
-                          maxW="350px"
-                          my="1"
-                          mx="1"
-                          p="3"
-                          borderRadius={"xl"}
-                        >
-                          <Text>{parsedMessage.toLowerCase()}</Text>
-                        </Flex>
-                      </Flex>
-                    );
-                  } else if (sender === "BOT") {
-                    return (
-                      <Flex w="100%" justify="flex-end">
-                        <Flex
-                          bg="blue.100"
-                          color="black"
-                          maxW="350px"
-                          my="1"
-                          mx="1"
-                          p="3"
-                          borderRadius={"xl"}
-                        >
-                          <Text>{parsedMessage.toLowerCase()}</Text>
-                        </Flex>
-                      </Flex>
-                    );
-                  } else if (sender === "ROBOANSWERER") {
-                    return (
-                      <VStack>
-                        <Text fontStyle="italic">
-                          {timestampToString(message["timestamp"])}
-                        </Text>
-                        <Text fontStyle="italic">{parsedMessage}</Text>
-                      </VStack>
-                    );
-                  } else if (sender === "USER") {
-                    return (
-                      <Flex w="100%" justify="flex-end">
-                        <Flex
-                          bg="green.100"
-                          color="black"
-                          maxW="350px"
-                          my="1"
-                          mx="1"
-                          p="3"
-                          borderRadius={"xl"}
-                        >
-                          <Text>{parsedMessage.toLowerCase()}</Text>
-                        </Flex>
-                      </Flex>
-                    );
-                  } else {
-                    return <></>;
-                  }
-                })}
-              </>
-              {chatMetadata && chatMetadata["active"] === false && (
-                <Text fontStyle="italic">Call has ended</Text>
-              )}
-            </VStack>
-          </Box>
+          <Flex width="100%" justifyContent={"center"}>
+            <Box
+              width={"50%"}
+              minHeight={"50vh"}
+              borderWidth="1px"
+              borderRadius="xl"
+            >
+              <VStack height="100%" width="100%" spacing={0}>
+                <>
+                  {messages.map((message) => (
+                    <ChatMessage message={message} />
+                  ))}
+                </>
+                <Spacer />
+                {chatMetadata && chatMetadata["active"] === false && (
+                  <Text paddingBottom={2} fontStyle="italic">
+                    Call has ended
+                  </Text>
+                )}
+                {chatMetadata && chatMetadata["active"] && (
+                  <Box width="100%">
+                    <MessageInput onSubmit={sendMessage} />
+                  </Box>
+                )}
+              </VStack>
+            </Box>
+          </Flex>
           <HStack>
             {chatMetadata && chatMetadata["active"] && (
               <Button onClick={endCall}>End Call</Button>

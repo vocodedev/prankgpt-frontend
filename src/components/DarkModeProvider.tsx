@@ -1,7 +1,8 @@
 import {
+  Box,
   Flex,
   FormControl,
-  FormLabel,
+  Spacer,
   Switch,
   useColorMode,
 } from "@chakra-ui/react";
@@ -11,16 +12,16 @@ const DarkModeProvider = (props: any) => {
   return (
     <>
       <header>
-        <Flex p={2} w="90%" align={"right"} justify={"flex-end"}>
-          <FormControl display="flex" alignItems="center">
-            <FormLabel htmlFor="email-alerts" mb="0">
-              {colorMode}
-            </FormLabel>
-            <Switch
-              onChange={toggleColorMode}
-              isChecked={colorMode === "dark"}
-            />
-          </FormControl>
+        <Flex p={2} w="100%" justify={"flex-end"}>
+          <Spacer />
+          <Box>
+            <FormControl display="flex" alignItems="center">
+              <Switch
+                onChange={toggleColorMode}
+                isChecked={colorMode === "dark"}
+              />
+            </FormControl>
+          </Box>
         </Flex>
       </header>
       {props.children}
