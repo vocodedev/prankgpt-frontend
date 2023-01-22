@@ -18,7 +18,7 @@ export const useChatMetadata = (chatId: string) => {
   React.useEffect(() => {
     const unsubscribe = getChatMetadata(chatId, setChatMetadata);
     return unsubscribe;
-  });
+  }, [chatId]);
 
   return chatMetadata;
 };
