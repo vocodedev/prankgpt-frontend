@@ -50,10 +50,26 @@ const LiveChat: React.FC = () => {
     }
   };
 
-  const transferCall = () => {
+  const createConference = () => {
     if (chatMetadata && chatMetadata["active"]) {
       fetch(
-        `https://${process.env.REACT_APP_BACKEND_URL}/transfer_call/${chatMetadata["id"]}`,
+        `https://${process.env.REACT_APP_BACKEND_URL}/create_conference/${chatMetadata["id"]}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+        .then((response) => response.json())
+        .catch((error) => alert(error));
+    }
+  };
+
+  const transferCallToConference = () => {
+    if (chatMetadata && chatMetadata["active"]) {
+      fetch(
+        `https://${process.env.REACT_APP_BACKEND_URL}/transfer_call_to_conference/${chatMetadata["id"]}`,
         {
           method: "POST",
           headers: {
@@ -136,12 +152,20 @@ const LiveChat: React.FC = () => {
           </Flex>
           <HStack>
             {chatMetadata && chatMetadata["active"] && (
-              <Button onClick={endCall}>End Call</Button>
+              <Button onClick={endCall}>End call</Button>
             )}
             {chatMetadata &&
               chatMetadata["active"] &&
               chatMetadata["user"] !== "anonymous" && (
-                <Button onClick={transferCall}>Transfer Call</Button>
+                <Button onClick={createConference}>Create conference</Button>
+              )}
+            {chatMetadata &&
+              chatMetadata["active"] &&
+              chatMetadata["user"] !== "anonymous" &&
+              chatMetadata["readyForConference"] && (
+                <Button onClick={transferCallToConference}>
+                  Transfer call to conference
+                </Button>
               )}
             {chatMetadata && chatMetadata["recordingUrl"] && (
               <Button>
