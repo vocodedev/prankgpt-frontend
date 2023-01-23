@@ -11,6 +11,7 @@ import {
   ModalOverlay,
   ModalBody,
   ModalContent,
+  useToast,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../helpers/UserContext";
@@ -22,12 +23,25 @@ const Main: React.FC = () => {
   const navigate = useNavigate();
   const [showVerificationModal, setShowVerificationModal] =
     React.useState(false);
+  const toast = useToast();
 
   const onInitiateChatResponse = (data: InitiateChatResponse) => {
     if (data.success) {
       const chatId = data.chatId;
       navigate(`/chat/${chatId}`);
     }
+  };
+
+  const onLogin = () => {
+    setShowVerificationModal(false);
+    toast({
+      title: "Verified number successfully",
+      description:
+        "Calls from PrankGPT will appear as though they are coming from your number",
+      status: "success",
+      duration: 9000,
+      isClosable: true,
+    });
   };
 
   return (
@@ -44,7 +58,7 @@ const Main: React.FC = () => {
         <ModalOverlay />
         <ModalContent>
           <ModalBody>
-            <Login onLogin={() => setShowVerificationModal(false)} />
+            <Login onLogin={onLogin} />
           </ModalBody>
         </ModalContent>
       </Modal>
