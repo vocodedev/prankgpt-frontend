@@ -20,6 +20,7 @@ import { useChatMetadata, useMessages } from "../hooks/firebaseHooks";
 import { UserContext } from "../helpers/UserContext";
 import MessageInput from "./MessageInput";
 import ChatMessage from "./ChatMessage";
+import LiveChatSwitch from "./LiveChatSwitch";
 
 const LiveChat: React.FC = () => {
   const { chatId } = useParams();
@@ -129,6 +130,28 @@ const LiveChat: React.FC = () => {
     return false;
   };
 
+  const setAllowHumanToCutOffBot = async (
+    allowHumanToCutOffBot: boolean
+  ): Promise<boolean> => {
+    if (chatMetadata && chatMetadata["active"]) {
+      const response = await fetch(
+        `https://${process.env.REACT_APP_BACKEND_URL}/set_allow_human_to_cut_off_bot/${chatMetadata["id"]}`,
+        {
+          method: "POST",
+          body: JSON.stringify({
+            allowHumanToCutOffBot,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const data = await response.json();
+      return data["success"] === true;
+    }
+    return false;
+  };
+
   const ringing =
     messages.length === 0 && (!chatMetadata || chatMetadata["active"]);
 
@@ -148,21 +171,31 @@ const LiveChat: React.FC = () => {
         <>
           <Flex width="100%" justifyContent={"center"}>
             <VStack width="100%">
-              {chatMetadata &&
-                chatMetadata["active"] &&
-                chatMetadata["useGpt3Response"] !== undefined && (
-                  <Box>
-                    <FormControl display="flex" alignItems="center">
-                      <FormLabel mb="0">Respond with GPT-3</FormLabel>
-                      <Switch
-                        onChange={(event) =>
-                          setUseGpt3Response(event.target.checked)
-                        }
-                        isChecked={chatMetadata["useGpt3Response"]}
-                      />
-                    </FormControl>
-                  </Box>
-                )}
+              <HStack>
+                {chatMetadata &&
+                  chatMetadata["active"] &&
+                  chatMetadata["useGpt3Response"] !== undefined && (
+                    <LiveChatSwitch
+                      label="Respond with GPT-3"
+                      onChange={(event) =>
+                        setUseGpt3Response(event.target.checked)
+                      }
+                      isChecked={chatMetadata["useGpt3Response"]}
+                    />
+                  )}
+                {chatMetadata &&
+                  chatMetadata["active"] &&
+                  chatMetadata["useGpt3Response"] &&
+                  chatMetadata["allowHumanToCutOffBot"] !== undefined && (
+                    <LiveChatSwitch
+                      label="Allow human to cut off bot response"
+                      onChange={(event) => {
+                        setAllowHumanToCutOffBot(event.target.checked);
+                      }}
+                      isChecked={chatMetadata["allowHumanToCutOffBot"]}
+                    />
+                  )}
+              </HStack>
               <Box
                 width={"50%"}
                 minHeight={"50vh"}

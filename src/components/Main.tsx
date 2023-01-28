@@ -1,12 +1,5 @@
 import React from "react";
 import {
-  Box,
-  Button,
-  Text,
-  VStack,
-  Textarea,
-  Center,
-  Checkbox,
   Modal,
   ModalOverlay,
   ModalBody,

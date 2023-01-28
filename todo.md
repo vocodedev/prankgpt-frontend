@@ -14,7 +14,8 @@ Tomorrow:
 - [x] remove submit from phone verification
 - [x] figure out backend ec2 instance pricing
 - [x] add chat
-- [] stop talking if human cuts off Marv
+- [x] stop talking if human cuts off Marv
+  - [x] reflect the chat at where Marv stops talking
 - [x] handoff chat
 - [x] automatically hang up on bye
 - [] listen to live call - you can do this by forking the stream and using the both_tracks parameter to send audio to a separate websocket which you can listen
