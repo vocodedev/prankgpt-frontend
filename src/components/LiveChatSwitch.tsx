@@ -1,7 +1,5 @@
 import { Box } from "@chakra-ui/layout";
 import { FormControl, FormLabel, Switch } from "@chakra-ui/react";
-import React from "react";
-import { UserContext } from "../helpers/UserContext";
 
 const LiveChatSwitch = ({
   label,

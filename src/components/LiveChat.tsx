@@ -117,7 +117,7 @@ const LiveChat: React.FC = () => {
         {
           method: "POST",
           body: JSON.stringify({
-            useGpt3Response,
+            use_gpt3_response: useGpt3Response,
           }),
           headers: {
             "Content-Type": "application/json",
@@ -139,7 +139,7 @@ const LiveChat: React.FC = () => {
         {
           method: "POST",
           body: JSON.stringify({
-            allowHumanToCutOffBot,
+            allow_human_to_cut_off_bot: allowHumanToCutOffBot,
           }),
           headers: {
             "Content-Type": "application/json",

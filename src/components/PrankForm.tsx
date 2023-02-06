@@ -23,20 +23,20 @@ const PrankForm = ({
   const [anonymous, setAnonymous] = React.useState(false);
 
   const initiateCall = (
-    to: string,
-    from: string | undefined,
+    to_phone: string,
+    from_phone: string | undefined,
     prompt: string,
     anonymous: boolean
   ): void => {
-    if (!from && !anonymous) {
+    if (!from_phone && !anonymous) {
       startVerification();
       return onInitiateChatResponse({ success: false });
     }
-    if (to === "" || prompt === "") {
+    if (to_phone === "" || prompt === "") {
       alert("Please fill out all fields");
       return onInitiateChatResponse({ success: false });
     }
-    if (from === to && !anonymous) {
+    if (from_phone === to_phone && !anonymous) {
       alert("If you're going to call yourself, please check the anonymous box");
       return onInitiateChatResponse({ success: false });
     }
@@ -46,8 +46,8 @@ const PrankForm = ({
       {
         method: "POST",
         body: JSON.stringify({
-          to,
-          from,
+          to_phone,
+          from_phone,
           prompt,
           anonymous,
         }),
@@ -83,7 +83,7 @@ const PrankForm = ({
         value={receiverPhoneNumber}
       />
       <Text fontSize="20px" padding="10px">
-        2. Enter a prompt to instruct the AI with what to say.
+        2. Enter a prompt to instruct the AI with what to talk about
       </Text>
       <Textarea
         placeholder="e.g. tell Ajay that he's been accepted to Hogwarts"

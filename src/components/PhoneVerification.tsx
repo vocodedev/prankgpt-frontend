@@ -8,7 +8,6 @@ import {
 } from "@chakra-ui/layout";
 import { PinInput, PinInputField, Button } from "@chakra-ui/react";
 import React from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
 import { UserContext } from "../helpers/UserContext";
 import ErrorPage from "./ErrorPage";
 
@@ -26,6 +25,7 @@ const isCallerIdVerified = async (phoneNumber: string): Promise<boolean> => {
     }
   );
   const data = await response.json();
+  console.log(data);
   return data.verified;
 };
 
