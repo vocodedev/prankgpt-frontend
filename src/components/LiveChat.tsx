@@ -250,11 +250,6 @@ const LiveChat: React.FC = () => {
                   Transfer call to conference
                 </Button>
               )}
-            {chatMetadata && chatMetadata["recordingUrl"] && (
-              <Button>
-                <Link href={chatMetadata["recordingUrl"]}>View recording</Link>
-              </Button>
-            )}
             <Button onClick={() => navigate("/")}>Go Back</Button>
           </HStack>
         </>
