@@ -94,7 +94,7 @@ const PrankForm = ({
         padding={"10px"}
         onChange={(text) => setPrompt(text.target.value)}
       />
-      <Text fontSize="20px" padding="10px">
+      {/* <Text fontSize="20px" padding="10px">
         3. Do you want to call using your number or remain anonymous?
       </Text>
       <Checkbox
@@ -105,7 +105,7 @@ const PrankForm = ({
         }}
       >
         Remain anonymous
-      </Checkbox>
+      </Checkbox> */}
       <Box padding="10px" width="100%">
         <Center>
           <Button
