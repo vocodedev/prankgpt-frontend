@@ -46,7 +46,7 @@ const PhoneVerification = ({
       let callerIdVerified = false;
       while (!callerIdVerified) {
         callerIdVerified = await isCallerIdVerified(phoneNumber);
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        await new Promise((resolve) => setTimeout(resolve, 5000));
       }
       setShowVerificationScreen(false);
     };
