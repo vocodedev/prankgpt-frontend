@@ -148,7 +148,6 @@ const PrankForm = ({
         placeholder="e.g. tell Ajay that he's been accepted to Hogwarts"
         width={"40%"}
         minWidth={"300px"}
-        height={"150px"}
         fontSize={"15px"}
         padding={"10px"}
         onChange={(text) => setPrompt(text.target.value)}

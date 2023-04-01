@@ -87,11 +87,40 @@ const Main: React.FC = () => {
               />
               <Image src="/rimelabslogo.png" height={20} paddingLeft={3} />
             </HStack>
-            <img
-              src="https://img.shields.io/github/stars/vocodedev/vocode-python?style=social"
-              height="10%"
-              alt="vocode"
-            />
+            <HStack>
+              <img
+                src="https://img.shields.io/github/stars/vocodedev/vocode-python?style=social"
+                height="10%"
+                alt="vocode"
+              />
+              {colorMode === "light" ? (
+                <a
+                  href="https://www.producthunt.com/posts/prankgpt?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-prankgpt"
+                  target="_blank"
+                >
+                  <img
+                    src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=386990&theme=light"
+                    alt="PrankGPT - Prank&#0032;call&#0032;your&#0032;friends&#0032;with&#0032;an&#0032;AI&#0032;that&#0032;can&#0032;say&#0032;anything | Product Hunt"
+                    style={{ width: "125px", height: "27px;" }}
+                    width="125"
+                    height="27"
+                  />
+                </a>
+              ) : (
+                <a
+                  href="https://www.producthunt.com/posts/prankgpt?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-prankgpt"
+                  target="_blank"
+                >
+                  <img
+                    src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=386990&theme=dark"
+                    alt="PrankGPT - Prank&#0032;call&#0032;your&#0032;friends&#0032;with&#0032;an&#0032;AI&#0032;that&#0032;can&#0032;say&#0032;anything | Product Hunt"
+                    style={{ width: "125px", height: "27px;" }}
+                    width="125"
+                    height="27"
+                  />
+                </a>
+              )}
+            </HStack>
 
             <Text fontSize={"s"}>
               Vocode is an open source library for building voice-based LLM
