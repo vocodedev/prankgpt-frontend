@@ -63,17 +63,16 @@ const PrankForm = ({
     from_phone && (await maybeWriteToSupabase(from_phone));
     const userId = session?.user?.id;
     if (from_phone) {
-      isCallerIdVerified(from_phone!).then((verified) => {
-        if (!verified) {
-          startVerification("callerId");
+      const verified = await isCallerIdVerified(from_phone!);
+      if (!verified) {
+        startVerification("callerId");
+        return failInitiateCall();
+      } else {
+        if (!userId) {
+          startVerification("normal");
           return failInitiateCall();
-        } else {
-          if (!userId) {
-            startVerification("normal");
-            return failInitiateCall();
-          }
         }
-      });
+      }
     } else if (!userId) {
       startVerification("normal");
       return failInitiateCall();
