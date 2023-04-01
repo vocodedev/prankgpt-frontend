@@ -94,7 +94,7 @@ const PrankForm = ({
         value={voice}
       >
         <option value="marv">Marv</option>
-        <option value="zephyr">Zephyr</option>
+        <option value="zephyr">Zephyr (Voice provided by rime.ai!)</option>
       </Select>
       <Text fontSize="20px" padding="10px">
         3. Enter a prompt to instruct the AI with what to talk about
