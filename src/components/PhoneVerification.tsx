@@ -20,9 +20,11 @@ import ErrorPage from "./ErrorPage";
 const PhoneVerification = ({
   phoneNumber,
   verificationType,
+  setShowVerificationScreen,
 }: {
   phoneNumber: string;
   verificationType: VerificationType;
+  setShowVerificationScreen: (showVerificationScreen: boolean) => void;
 }) => {
   const [verificationCode, setVerificationCode] = React.useState("");
   const [isCallerIdVerification, setIsCallerIdVerification] =
@@ -46,6 +48,7 @@ const PhoneVerification = ({
         callerIdVerified = await isCallerIdVerified(phoneNumber);
         await new Promise((resolve) => setTimeout(resolve, 1000));
       }
+      setShowVerificationScreen(false);
     };
 
     if (verificationType === "callerId") {

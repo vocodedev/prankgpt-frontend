@@ -30,11 +30,13 @@ const Login = ({
       <PhoneVerification
         verificationType={verificationType}
         phoneNumber={phoneNumber}
+        setShowVerificationScreen={setShowVerificationScreen}
       />
     );
   } else {
     return (
       <LoginForm
+        verificationType={verificationType}
         phoneNumber={phoneNumber}
         setPhoneNumber={setPhoneNumber}
         onSubmit={onLoginFormSubmit}
