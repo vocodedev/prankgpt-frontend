@@ -58,8 +58,8 @@ const PrankForm = ({
       return onInitiateChatResponse({ success: false });
     }
     if (from_phone === to_phone && !anonymous) {
-      alert("If you want to prank yourself, please check the anonymous box");
-      return onInitiateChatResponse({ success: false });
+      anonymous = true;
+      console.log("setting anonymous to true to call self");
     }
     fetch(
       `https://${process.env.REACT_APP_BACKEND_URL}/initiate_chat/${userId}`,
