@@ -8,7 +8,8 @@ import {
 } from "@chakra-ui/layout";
 import { PinInput, PinInputField, Button } from "@chakra-ui/react";
 import React from "react";
-import { UserContext } from "../helpers/UserContext";
+import { SessionContext } from "../helpers/SessionContext";
+import { supabase } from "../services/supabase";
 import ErrorPage from "./ErrorPage";
 
 const isCallerIdVerified = async (phoneNumber: string): Promise<boolean> => {
@@ -46,90 +47,72 @@ const sendCallerIdValidation = async (phoneNumber: string): Promise<string> => {
   return data.code;
 };
 
-const sendVerificationCode = async (phoneNumber: string): Promise<boolean> => {
-  const response = await fetch(
-    `https://${process.env.REACT_APP_BACKEND_URL}/send_verification_code`,
-    {
-      method: "POST",
-      body: JSON.stringify({
-        phone_number: phoneNumber,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  );
-  const data = await response.json();
-  return data.success;
-};
+// const sendVerificationCode = async (phoneNumber: string): Promise<boolean> => {
+//   const response = await fetch(
+//     `https://${process.env.REACT_APP_BACKEND_URL}/send_verification_code`,
+//     {
+//       method: "POST",
+//       body: JSON.stringify({
+//         phone_number: phoneNumber,
+//       }),
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//     }
+//   );
+//   const data = await response.json();
+//   return data.success;
+// };
 
-const verifyPhoneNumber = async (
-  phoneNumber: string,
-  code: string
-): Promise<boolean> => {
-  const response = await fetch(
-    `https://${process.env.REACT_APP_BACKEND_URL}/verify_phone_number`,
-    {
-      method: "POST",
-      body: JSON.stringify({
-        phone_number: phoneNumber,
-        code,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  );
-  const data = await response.json();
-  return data.status === "approved";
-};
+// const verifyPhoneNumber = async (
+//   phoneNumber: string,
+//   code: string
+// ): Promise<boolean> => {
+//   const response = await fetch(
+//     `https://${process.env.REACT_APP_BACKEND_URL}/verify_phone_number`,
+//     {
+//       method: "POST",
+//       body: JSON.stringify({
+//         phone_number: phoneNumber,
+//         code,
+//       }),
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//     }
+//   );
+//   const data = await response.json();
+//   return data.status === "approved";
+// };
 
-const getOrCreateUser = async (phoneNumber: string): Promise<object> => {
-  return await fetch(
-    `https://${process.env.REACT_APP_BACKEND_URL}/get_or_create_user`,
-    {
-      method: "POST",
-      body: JSON.stringify({
-        phone_number: phoneNumber,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  ).then((response) => response.json());
-};
+// const getOrCreateUser = async (phoneNumber: string): Promise<object> => {
+//   return await fetch(
+//     `https://${process.env.REACT_APP_BACKEND_URL}/get_or_create_user`,
+//     {
+//       method: "POST",
+//       body: JSON.stringify({
+//         phone_number: phoneNumber,
+//       }),
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//     }
+//   ).then((response) => response.json());
+// };
 
-const PhoneVerification = ({
-  phoneNumber,
-  setVerified,
-}: {
-  phoneNumber: string;
-  setVerified: (verified: boolean) => void;
-}) => {
-  const { setUser } = React.useContext(UserContext);
+const PhoneVerification = ({ phoneNumber }: { phoneNumber: string }) => {
+  const { session } = React.useContext(SessionContext);
 
   const [verificationCode, setVerificationCode] = React.useState("");
   const [isCallerIdVerification, setIsCallerIdVerification] =
     React.useState(false);
   const [isNormalVerification, setIsNormalVerification] = React.useState(false);
 
-  const onVerified = () => {
-    if (phoneNumber) {
-      getOrCreateUser(phoneNumber).then((user) => {
-        setUser(user);
-      });
-      setVerified(true);
-    }
-  };
-
   React.useEffect(() => {
-    const pollIsVerified = async (phoneNumber: string) => {
-      let verified = false;
-      while (!verified) {
-        verified = await isCallerIdVerified(phoneNumber);
-        if (verified) {
-          onVerified();
-        }
+    const waitForCallerIdVerified = async (phoneNumber: string) => {
+      let callerIdVerified = false;
+      while (!callerIdVerified) {
+        callerIdVerified = await isCallerIdVerified(phoneNumber);
         await new Promise((resolve) => setTimeout(resolve, 1000));
       }
     };
@@ -137,13 +120,19 @@ const PhoneVerification = ({
     if (phoneNumber) {
       isCallerIdVerified(phoneNumber).then((verified) => {
         if (verified) {
-          Promise.resolve(sendVerificationCode(phoneNumber));
-          setIsNormalVerification(true);
+          console.log(phoneNumber);
+          supabase.auth
+            .signInWithOtp({
+              phone: phoneNumber,
+            })
+            .then((error) => {
+              setIsNormalVerification(true);
+            });
         } else {
           sendCallerIdValidation(phoneNumber).then((code) => {
             setIsCallerIdVerification(true);
             setVerificationCode(code);
-            pollIsVerified(phoneNumber);
+            waitForCallerIdVerified(phoneNumber);
           });
         }
       });
@@ -167,10 +156,12 @@ const PhoneVerification = ({
     onSubmit();
   };
 
-  const onSubmit = () => {
-    verifyPhoneNumber(phoneNumber, verificationCode).then(
-      (verified) => verified && onVerified()
-    );
+  const onSubmit = async () => {
+    await supabase.auth.verifyOtp({
+      phone: phoneNumber,
+      token: verificationCode,
+      type: "sms",
+    });
   };
 
   return (
@@ -181,7 +172,8 @@ const PhoneVerification = ({
             <VStack>
               {isCallerIdVerification && (
                 <Text>
-                  You'll receive a call. When prompted, please enter the number
+                  We're setting up your phone's caller ID in our system. You'll
+                  receive a call. When prompted, please enter the number
                   displayed below.
                 </Text>
               )}

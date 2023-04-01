@@ -2,7 +2,7 @@ import CustomPhoneInput from "./CustomPhoneInput";
 import React from "react";
 import { HStack, VStack, Text, Box, Center } from "@chakra-ui/layout";
 import { Button, Checkbox, Select, Textarea } from "@chakra-ui/react";
-import { UserType } from "../helpers/UserContext";
+import { SessionContext } from "../helpers/SessionContext";
 
 export type InitiateChatResponse = {
   success: boolean;
@@ -10,14 +10,13 @@ export type InitiateChatResponse = {
 };
 
 const PrankForm = ({
-  user,
   startVerification,
   onInitiateChatResponse,
 }: {
-  user: UserType | null;
   startVerification: () => void;
   onInitiateChatResponse: (data: InitiateChatResponse) => void;
 }) => {
+  const { session } = React.useContext(SessionContext);
   const [receiverPhoneNumber, setReceiverPhoneNumber] = React.useState("");
   const [prompt, setPrompt] = React.useState("");
   const [anonymous, setAnonymous] = React.useState(false);
@@ -30,8 +29,12 @@ const PrankForm = ({
     anonymous: boolean,
     voice: string
   ): void => {
-    if (!from_phone && !anonymous) {
+    const userId = session?.user?.id;
+    if (!userId) {
       startVerification();
+      return onInitiateChatResponse({ success: false });
+    }
+    if (!from_phone && !anonymous) {
       return onInitiateChatResponse({ success: false });
     }
     if (to_phone === "" || prompt === "") {
@@ -41,7 +44,6 @@ const PrankForm = ({
     if (from_phone === to_phone && !anonymous) {
       anonymous = true;
     }
-    const userId = user?.id || "anonymous";
     fetch(
       `https://${process.env.REACT_APP_BACKEND_URL}/initiate_chat/${userId}`,
       {
@@ -107,7 +109,7 @@ const PrankForm = ({
         padding={"10px"}
         onChange={(text) => setPrompt(text.target.value)}
       />
-      {/* <Text fontSize="20px" padding="10px">
+      <Text fontSize="20px" padding="10px">
         4. Do you want to call using your number or remain anonymous?
       </Text>
       <Checkbox
@@ -118,7 +120,7 @@ const PrankForm = ({
         }}
       >
         Remain anonymous
-      </Checkbox> */}
+      </Checkbox>
       <Box padding="10px" width="100%">
         <Center>
           <Button
@@ -130,7 +132,7 @@ const PrankForm = ({
               // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
               initiateCall(
                 receiverPhoneNumber,
-                user?.phoneNumber,
+                session?.user.phone,
                 prompt,
                 anonymous,
                 voice

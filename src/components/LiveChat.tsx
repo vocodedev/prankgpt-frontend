@@ -17,14 +17,14 @@ import { PhoneIcon } from "@chakra-ui/icons";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useChatMetadata, useMessages } from "../hooks/firebaseHooks";
-import { UserContext } from "../helpers/UserContext";
+import { SessionContext } from "../helpers/SessionContext";
 import MessageInput from "./MessageInput";
 import ChatMessage from "./ChatMessage";
 import LiveChatSwitch from "./LiveChatSwitch";
 
 const LiveChat: React.FC = () => {
   const { chatId } = useParams();
-  const { user } = React.useContext(UserContext);
+  const { session } = React.useContext(SessionContext);
   const messages = useMessages(chatId!);
   const chatMetadata = useChatMetadata(chatId!);
   const navigate = useNavigate();
@@ -33,7 +33,7 @@ const LiveChat: React.FC = () => {
   const { colorMode } = useColorMode();
 
   useEffect(() => {
-    const userId = user?.id || "anonymous";
+    const userId = session?.user?.id || "anonymous";
     if (chatMetadata && chatMetadata["user"] !== userId) {
       navigate("/");
     } else if (chatMetadata && chatMetadata["user"] === userId) {

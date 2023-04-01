@@ -7,12 +7,11 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
-import { UserContext } from "../helpers/UserContext";
+import { SessionContext } from "../helpers/SessionContext";
 import PrankForm, { InitiateChatResponse } from "./PrankForm";
 import Login from "./Login";
 
 const Main: React.FC = () => {
-  const { user } = React.useContext(UserContext);
   const navigate = useNavigate();
   const [showVerificationModal, setShowVerificationModal] =
     React.useState(false);
@@ -40,7 +39,6 @@ const Main: React.FC = () => {
   return (
     <>
       <PrankForm
-        user={user}
         startVerification={() => setShowVerificationModal(true)}
         onInitiateChatResponse={onInitiateChatResponse}
       />

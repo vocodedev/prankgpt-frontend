@@ -1,27 +1,25 @@
 import React from "react";
 import { createSearchParams, useNavigate } from "react-router-dom";
+import { SessionContext } from "../helpers/SessionContext";
 import LoginForm from "./LoginForm";
 import PhoneVerification from "./PhoneVerification";
 
 const Login = ({ onLogin }: { onLogin: () => void }) => {
-  const [phoneNumber, setPhoneNumber] = React.useState("");
-  const [verified, setVerified] = React.useState(false);
+  const [phoneNumber, setPhoneNumber] = React.useState<string>("");
+  const { session } = React.useContext(SessionContext);
   const [showVerificationScreen, setShowVerificationScreen] =
     React.useState(false);
-  const navigate = useNavigate();
 
   React.useEffect(() => {
-    if (verified) {
+    if (session?.user) {
       onLogin();
     }
-  }, [verified]);
+  }, [session]);
 
   const onLoginFormSubmit = () => setShowVerificationScreen(true);
 
   if (showVerificationScreen) {
-    return (
-      <PhoneVerification phoneNumber={phoneNumber} setVerified={setVerified} />
-    );
+    return <PhoneVerification phoneNumber={phoneNumber} />;
   } else {
     return (
       <LoginForm
