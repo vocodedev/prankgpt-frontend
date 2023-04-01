@@ -85,7 +85,7 @@ const PrankForm = ({
         value={receiverPhoneNumber}
       />
       <Text fontSize="20px" padding="10px">
-        2. Enter a prompt to instruct the AI with what to talk about
+        2. Choose your voice
       </Text>
       <Select
         width="40%"
