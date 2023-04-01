@@ -1,7 +1,7 @@
 import CustomPhoneInput from "./CustomPhoneInput";
 import React from "react";
 import { HStack, VStack, Text, Box, Center } from "@chakra-ui/layout";
-import { Button, Checkbox, Select, Textarea } from "@chakra-ui/react";
+import { Button, Checkbox, Select, Spinner, Textarea } from "@chakra-ui/react";
 import { SessionContext } from "../helpers/SessionContext";
 import { isCallerIdVerified, VerificationType } from "../helpers/verification";
 
@@ -22,6 +22,12 @@ const PrankForm = ({
   const [prompt, setPrompt] = React.useState("");
   const [anonymous, setAnonymous] = React.useState(false);
   const [voice, setVoice] = React.useState("marv");
+  const [callLoading, setCallLoading] = React.useState(false);
+
+  const failInitiateCall = () => {
+    setCallLoading(false);
+    onInitiateChatResponse({ success: false });
+  };
 
   const initiateCall = (
     to_phone: string,
@@ -30,32 +36,33 @@ const PrankForm = ({
     anonymous: boolean,
     voice: string
   ): void => {
+    setCallLoading(true);
     if (from_phone && !from_phone.startsWith("+")) {
       from_phone = "+" + from_phone;
     }
     if (!from_phone && !anonymous) {
-      return onInitiateChatResponse({ success: false });
+      return failInitiateCall();
     }
     const userId = session?.user?.id;
     if (from_phone) {
       isCallerIdVerified(from_phone!).then((verified) => {
         if (!verified) {
           startVerification("callerId");
-          return onInitiateChatResponse({ success: false });
+          return failInitiateCall();
         } else {
           if (!userId) {
             startVerification("normal");
-            return onInitiateChatResponse({ success: false });
+            return failInitiateCall();
           }
         }
       });
     } else if (!userId) {
       startVerification("normal");
-      return onInitiateChatResponse({ success: false });
+      return failInitiateCall();
     }
     if (to_phone === "" || prompt === "") {
       alert("Please fill out all fields");
-      return onInitiateChatResponse({ success: false });
+      return failInitiateCall();
     }
     if (from_phone === to_phone && !anonymous) {
       anonymous = true;
@@ -156,6 +163,11 @@ const PrankForm = ({
               )
             }
           >
+            {callLoading && (
+              <>
+                <Spinner /> &nbsp;
+              </>
+            )}
             Start call!
           </Button>
         </Center>
