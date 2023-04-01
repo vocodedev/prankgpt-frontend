@@ -29,6 +29,9 @@ const PrankForm = ({
     anonymous: boolean,
     voice: string
   ): void => {
+    if (from_phone && !from_phone.startsWith("+")) {
+      from_phone = "+" + from_phone;
+    }
     const userId = session?.user?.id;
     if (!userId) {
       startVerification();
@@ -42,7 +45,8 @@ const PrankForm = ({
       return onInitiateChatResponse({ success: false });
     }
     if (from_phone === to_phone && !anonymous) {
-      anonymous = true;
+      alert("If you want to prank yourself, please check the anonymous box");
+      return onInitiateChatResponse({ success: false });
     }
     fetch(
       `https://${process.env.REACT_APP_BACKEND_URL}/initiate_chat/${userId}`,
