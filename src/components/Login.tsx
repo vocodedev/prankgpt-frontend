@@ -4,7 +4,13 @@ import { SessionContext } from "../helpers/SessionContext";
 import LoginForm from "./LoginForm";
 import PhoneVerification from "./PhoneVerification";
 
-const Login = ({ onLogin }: { onLogin: () => void }) => {
+const Login = ({
+  onLogin,
+  anonymous,
+}: {
+  onLogin: () => void;
+  anonymous: boolean;
+}) => {
   const [phoneNumber, setPhoneNumber] = React.useState<string>("");
   const { session } = React.useContext(SessionContext);
   const [showVerificationScreen, setShowVerificationScreen] =
@@ -19,7 +25,9 @@ const Login = ({ onLogin }: { onLogin: () => void }) => {
   const onLoginFormSubmit = () => setShowVerificationScreen(true);
 
   if (showVerificationScreen) {
-    return <PhoneVerification phoneNumber={phoneNumber} />;
+    return (
+      <PhoneVerification anonymous={anonymous} phoneNumber={phoneNumber} />
+    );
   } else {
     return (
       <LoginForm

@@ -100,13 +100,29 @@ const sendCallerIdValidation = async (phoneNumber: string): Promise<string> => {
 //   ).then((response) => response.json());
 // };
 
-const PhoneVerification = ({ phoneNumber }: { phoneNumber: string }) => {
+const PhoneVerification = ({
+  phoneNumber,
+  anonymous,
+}: {
+  phoneNumber: string;
+  anonymous: boolean;
+}) => {
   const { session } = React.useContext(SessionContext);
 
   const [verificationCode, setVerificationCode] = React.useState("");
   const [isCallerIdVerification, setIsCallerIdVerification] =
     React.useState(false);
   const [isNormalVerification, setIsNormalVerification] = React.useState(false);
+
+  const signInWithOtp = (phoneNumber: string) => {
+    supabase.auth
+      .signInWithOtp({
+        phone: phoneNumber,
+      })
+      .then((error) => {
+        setIsNormalVerification(true);
+      });
+  };
 
   React.useEffect(() => {
     const waitForCallerIdVerified = async (phoneNumber: string) => {
@@ -117,17 +133,10 @@ const PhoneVerification = ({ phoneNumber }: { phoneNumber: string }) => {
       }
     };
 
-    if (phoneNumber) {
+    if (!anonymous) {
       isCallerIdVerified(phoneNumber).then((verified) => {
         if (verified) {
-          console.log(phoneNumber);
-          supabase.auth
-            .signInWithOtp({
-              phone: phoneNumber,
-            })
-            .then((error) => {
-              setIsNormalVerification(true);
-            });
+          signInWithOtp(phoneNumber);
         } else {
           sendCallerIdValidation(phoneNumber).then((code) => {
             setIsCallerIdVerification(true);
@@ -136,6 +145,8 @@ const PhoneVerification = ({ phoneNumber }: { phoneNumber: string }) => {
           });
         }
       });
+    } else {
+      signInWithOtp(phoneNumber);
     }
   }, []);
 

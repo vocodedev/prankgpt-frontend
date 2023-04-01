@@ -27,9 +27,7 @@ const Main: React.FC = () => {
   const onLogin = () => {
     setShowVerificationModal(false);
     toast({
-      title: "Verified number successfully",
-      description:
-        "Calls from PrankGPT will appear as though they are coming from your number",
+      title: "Logged in successfully",
       status: "success",
       duration: 9000,
       isClosable: true,
