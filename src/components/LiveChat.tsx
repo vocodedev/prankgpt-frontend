@@ -214,7 +214,7 @@ const LiveChat: React.FC = () => {
                       Call has ended
                     </Text>
                   )}
-                  {chatMetadata && chatMetadata["active"] && (
+                  {/* {chatMetadata && chatMetadata["active"] && (
                     <Box
                       width="100%"
                       borderBottomRadius="xl"
@@ -222,7 +222,7 @@ const LiveChat: React.FC = () => {
                     >
                       <MessageInput onSubmit={sendMessage} />
                     </Box>
-                  )}
+                  )} */}
                 </VStack>
               </Box>
             </VStack>
@@ -231,7 +231,7 @@ const LiveChat: React.FC = () => {
             {chatMetadata && chatMetadata["active"] && (
               <Button onClick={endCall}>End call</Button>
             )}
-            {chatMetadata &&
+            {/* {chatMetadata &&
               chatMetadata["active"] &&
               chatMetadata["user"] !== "anonymous" &&
               !chatMetadata["readyForConference"] && (
@@ -249,7 +249,7 @@ const LiveChat: React.FC = () => {
                 <Button onClick={transferCallToConference}>
                   Transfer call to conference
                 </Button>
-              )}
+              )} */}
             <Button onClick={() => navigate("/")}>Go Back</Button>
           </HStack>
         </>
