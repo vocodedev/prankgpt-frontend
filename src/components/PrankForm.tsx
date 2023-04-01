@@ -106,9 +106,9 @@ const PrankForm = ({
           return await response.json();
         } else {
           const data = await response.json();
-          alert(data.error);
+          alert(data.detail);
           setCallLoading(false);
-          throw new Error(data.error);
+          throw new Error(data.detail);
         }
       })
       .then((data) =>
