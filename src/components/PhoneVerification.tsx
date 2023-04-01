@@ -10,105 +10,20 @@ import { PinInput, PinInputField, Button } from "@chakra-ui/react";
 import React from "react";
 import { SessionContext } from "../helpers/SessionContext";
 import { supabase } from "../services/supabase";
+import {
+  isCallerIdVerified,
+  sendCallerIdValidation,
+  VerificationType,
+} from "../helpers/verification";
 import ErrorPage from "./ErrorPage";
-
-const isCallerIdVerified = async (phoneNumber: string): Promise<boolean> => {
-  const response = await fetch(
-    `https://${process.env.REACT_APP_BACKEND_URL}/caller_id_verified`,
-    {
-      method: "POST",
-      body: JSON.stringify({
-        phone_number: phoneNumber,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  );
-  const data = await response.json();
-  console.log(data);
-  return data.verified;
-};
-
-const sendCallerIdValidation = async (phoneNumber: string): Promise<string> => {
-  const response = await fetch(
-    `https://${process.env.REACT_APP_BACKEND_URL}/create_caller_id`,
-    {
-      method: "POST",
-      body: JSON.stringify({
-        phone_number: phoneNumber,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  );
-  const data = await response.json();
-  return data.code;
-};
-
-// const sendVerificationCode = async (phoneNumber: string): Promise<boolean> => {
-//   const response = await fetch(
-//     `https://${process.env.REACT_APP_BACKEND_URL}/send_verification_code`,
-//     {
-//       method: "POST",
-//       body: JSON.stringify({
-//         phone_number: phoneNumber,
-//       }),
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//     }
-//   );
-//   const data = await response.json();
-//   return data.success;
-// };
-
-// const verifyPhoneNumber = async (
-//   phoneNumber: string,
-//   code: string
-// ): Promise<boolean> => {
-//   const response = await fetch(
-//     `https://${process.env.REACT_APP_BACKEND_URL}/verify_phone_number`,
-//     {
-//       method: "POST",
-//       body: JSON.stringify({
-//         phone_number: phoneNumber,
-//         code,
-//       }),
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//     }
-//   );
-//   const data = await response.json();
-//   return data.status === "approved";
-// };
-
-// const getOrCreateUser = async (phoneNumber: string): Promise<object> => {
-//   return await fetch(
-//     `https://${process.env.REACT_APP_BACKEND_URL}/get_or_create_user`,
-//     {
-//       method: "POST",
-//       body: JSON.stringify({
-//         phone_number: phoneNumber,
-//       }),
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//     }
-//   ).then((response) => response.json());
-// };
 
 const PhoneVerification = ({
   phoneNumber,
-  anonymous,
+  verificationType,
 }: {
   phoneNumber: string;
-  anonymous: boolean;
+  verificationType: VerificationType;
 }) => {
-  const { session } = React.useContext(SessionContext);
-
   const [verificationCode, setVerificationCode] = React.useState("");
   const [isCallerIdVerification, setIsCallerIdVerification] =
     React.useState(false);
@@ -133,17 +48,11 @@ const PhoneVerification = ({
       }
     };
 
-    if (!anonymous) {
-      isCallerIdVerified(phoneNumber).then((verified) => {
-        if (verified) {
-          signInWithOtp(phoneNumber);
-        } else {
-          sendCallerIdValidation(phoneNumber).then((code) => {
-            setIsCallerIdVerification(true);
-            setVerificationCode(code);
-            waitForCallerIdVerified(phoneNumber);
-          });
-        }
+    if (verificationType === "callerId") {
+      sendCallerIdValidation(phoneNumber).then((code) => {
+        setIsCallerIdVerification(true);
+        setVerificationCode(code);
+        waitForCallerIdVerified(phoneNumber);
       });
     } else {
       signInWithOtp(phoneNumber);

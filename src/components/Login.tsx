@@ -1,15 +1,16 @@
 import React from "react";
 import { createSearchParams, useNavigate } from "react-router-dom";
 import { SessionContext } from "../helpers/SessionContext";
+import { VerificationType } from "../helpers/verification";
 import LoginForm from "./LoginForm";
 import PhoneVerification from "./PhoneVerification";
 
 const Login = ({
   onLogin,
-  anonymous,
+  verificationType,
 }: {
   onLogin: () => void;
-  anonymous: boolean;
+  verificationType: VerificationType;
 }) => {
   const [phoneNumber, setPhoneNumber] = React.useState<string>("");
   const { session } = React.useContext(SessionContext);
@@ -17,7 +18,7 @@ const Login = ({
     React.useState(false);
 
   React.useEffect(() => {
-    if (session?.user) {
+    if (verificationType === "normal" && session?.user) {
       onLogin();
     }
   }, [session]);
@@ -26,7 +27,10 @@ const Login = ({
 
   if (showVerificationScreen) {
     return (
-      <PhoneVerification anonymous={anonymous} phoneNumber={phoneNumber} />
+      <PhoneVerification
+        verificationType={verificationType}
+        phoneNumber={phoneNumber}
+      />
     );
   } else {
     return (

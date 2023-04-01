@@ -10,11 +10,14 @@ import { useNavigate } from "react-router-dom";
 import { SessionContext } from "../helpers/SessionContext";
 import PrankForm, { InitiateChatResponse } from "./PrankForm";
 import Login from "./Login";
+import { VerificationType } from "../helpers/verification";
 
 const Main: React.FC = () => {
   const navigate = useNavigate();
   const [showVerificationModal, setShowVerificationModal] =
     React.useState(false);
+  const [verificationType, setVerificationType] =
+    React.useState<VerificationType>("normal");
   const toast = useToast();
 
   const onInitiateChatResponse = (data: InitiateChatResponse) => {
@@ -37,7 +40,10 @@ const Main: React.FC = () => {
   return (
     <>
       <PrankForm
-        startVerification={() => setShowVerificationModal(true)}
+        startVerification={(verificationType: VerificationType) => {
+          setVerificationType(verificationType);
+          setShowVerificationModal(true);
+        }}
         onInitiateChatResponse={onInitiateChatResponse}
       />
       <Modal
@@ -47,7 +53,7 @@ const Main: React.FC = () => {
         <ModalOverlay />
         <ModalContent>
           <ModalBody>
-            <Login onLogin={onLogin} />
+            <Login verificationType={verificationType} onLogin={onLogin} />
           </ModalBody>
         </ModalContent>
       </Modal>

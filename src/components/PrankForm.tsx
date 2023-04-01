@@ -3,6 +3,7 @@ import React from "react";
 import { HStack, VStack, Text, Box, Center } from "@chakra-ui/layout";
 import { Button, Checkbox, Select, Textarea } from "@chakra-ui/react";
 import { SessionContext } from "../helpers/SessionContext";
+import { isCallerIdVerified, VerificationType } from "../helpers/verification";
 
 export type InitiateChatResponse = {
   success: boolean;
@@ -13,7 +14,7 @@ const PrankForm = ({
   startVerification,
   onInitiateChatResponse,
 }: {
-  startVerification: () => void;
+  startVerification: (verificationType: VerificationType) => void;
   onInitiateChatResponse: (data: InitiateChatResponse) => void;
 }) => {
   const { session } = React.useContext(SessionContext);
@@ -32,12 +33,24 @@ const PrankForm = ({
     if (from_phone && !from_phone.startsWith("+")) {
       from_phone = "+" + from_phone;
     }
-    const userId = session?.user?.id;
-    if (!userId) {
-      startVerification();
+    if (!from_phone && !anonymous) {
       return onInitiateChatResponse({ success: false });
     }
-    if (!from_phone && !anonymous) {
+    const userId = session?.user?.id;
+    if (from_phone) {
+      isCallerIdVerified(from_phone!).then((verified) => {
+        if (!verified) {
+          startVerification("callerId");
+          return onInitiateChatResponse({ success: false });
+        } else {
+          if (!userId) {
+            startVerification("normal");
+            return onInitiateChatResponse({ success: false });
+          }
+        }
+      });
+    } else if (!userId) {
+      startVerification("normal");
       return onInitiateChatResponse({ success: false });
     }
     if (to_phone === "" || prompt === "") {
