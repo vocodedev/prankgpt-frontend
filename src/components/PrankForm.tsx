@@ -100,28 +100,30 @@ const PrankForm = ({
 
   return (
     <VStack>
-      <Text as="b" fontSize="70px" padding={"3%"}>
+      <Text as="b" fontSize="50px">
         PrankGPT
       </Text>
-      <Text fontSize="20px" padding="10px">
+      <Text fontSize="20px" padding="8px">
         1. Enter the phone number of the person you want to prank
       </Text>
       <CustomPhoneInput
         onChange={setReceiverPhoneNumber}
         value={receiverPhoneNumber}
       />
-      <Text fontSize="20px" padding="10px">
+      <Text fontSize="20px" padding="7px">
         2. Choose your voice
       </Text>
       <Select
-        width="40%"
+        width="65%"
         onChange={(event) => setVoice(event.target.value)}
         value={voice}
       >
-        <option value="marv">Marv</option>
-        <option value="zephyr">Zephyr (Voice provided by rime.ai!)</option>
+        <option value="marv">Marv (the OG evil prankbot)</option>
+        <option value="zephyr">
+          Zephyr (the gen Z queen; voice by rime.ai!)
+        </option>
       </Select>
-      <Text fontSize="20px" padding="10px">
+      <Text fontSize="20px" padding="8px">
         3. Enter a prompt to instruct the AI with what to talk about
       </Text>
       <Textarea
@@ -133,7 +135,7 @@ const PrankForm = ({
         padding={"10px"}
         onChange={(text) => setPrompt(text.target.value)}
       />
-      {/* <Text fontSize="20px" padding="10px">
+      <Text fontSize="20px" padding="7px">
         4. Do you want to call using your number or remain anonymous?
       </Text>
       <Checkbox
@@ -144,8 +146,8 @@ const PrankForm = ({
         }}
       >
         Remain anonymous
-      </Checkbox> */}
-      <Box padding="10px" width="100%">
+      </Checkbox>
+      <Box padding="7px" width="100%">
         <Center>
           <Button
             width={"30%"}

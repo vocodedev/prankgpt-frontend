@@ -5,6 +5,13 @@ import {
   ModalBody,
   ModalContent,
   useToast,
+  Box,
+  VStack,
+  HStack,
+  Image,
+  Text,
+  Flex,
+  useColorMode,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { SessionContext } from "../helpers/SessionContext";
@@ -37,27 +44,63 @@ const Main: React.FC = () => {
     });
   };
 
+  const { colorMode, toggleColorMode } = useColorMode();
+
   return (
-    <>
-      <PrankForm
-        startVerification={(verificationType: VerificationType) => {
-          setVerificationType(verificationType);
-          setShowVerificationModal(true);
-        }}
-        onInitiateChatResponse={onInitiateChatResponse}
-      />
-      <Modal
-        isOpen={showVerificationModal}
-        onClose={() => setShowVerificationModal(false)}
-      >
-        <ModalOverlay />
-        <ModalContent>
-          <ModalBody>
-            <Login verificationType={verificationType} onLogin={onLogin} />
-          </ModalBody>
-        </ModalContent>
-      </Modal>
-    </>
+    <Flex maxHeight={"100vh"} justify={"center"}>
+      <VStack>
+        <PrankForm
+          startVerification={(verificationType: VerificationType) => {
+            setVerificationType(verificationType);
+            setShowVerificationModal(true);
+          }}
+          onInitiateChatResponse={onInitiateChatResponse}
+        />
+        <Modal
+          isOpen={showVerificationModal}
+          onClose={() => setShowVerificationModal(false)}
+        >
+          <ModalOverlay />
+          <ModalContent>
+            <ModalBody>
+              <Login verificationType={verificationType} onLogin={onLogin} />
+            </ModalBody>
+          </ModalContent>
+        </Modal>
+        <Box
+          as="a"
+          href="https://github.com/vocodedev/vocode-python"
+          target="_blank"
+          rel="noopener noreferrer"
+          cursor="pointer"
+          _hover={{
+            opacity: 0.7,
+          }}
+        >
+          <VStack>
+            <Text fontSize={"s"}>Built with ❤️ with</Text>
+            <HStack>
+              <Image
+                src={`/${colorMode}_logo.svg`}
+                height={10}
+                paddingRight={3}
+              />
+              <Image src="/rimelabslogo.png" height={20} paddingLeft={3} />
+            </HStack>
+            <img
+              src="https://img.shields.io/github/stars/vocodedev/vocode-python?style=social"
+              height="10%"
+              alt="vocode"
+            />
+
+            <Text fontSize={"s"}>
+              Vocode is an open source library for building voice-based LLM
+              apps. Voices provided via Rime Labs and Google Cloud.
+            </Text>
+          </VStack>
+        </Box>
+      </VStack>
+    </Flex>
   );
 };
 
