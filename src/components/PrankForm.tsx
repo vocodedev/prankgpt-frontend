@@ -39,7 +39,7 @@ const PrankForm = ({
       return onInitiateChatResponse({ success: false });
     }
     if (from_phone === to_phone && !anonymous) {
-      alert("If you're going to call yourself, please check the anonymous box");
+      anonymous = true;
       return onInitiateChatResponse({ success: false });
     }
     const userId = user?.id || "anonymous";
