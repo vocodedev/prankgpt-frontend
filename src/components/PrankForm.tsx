@@ -40,7 +40,6 @@ const PrankForm = ({
     }
     if (from_phone === to_phone && !anonymous) {
       anonymous = true;
-      return onInitiateChatResponse({ success: false });
     }
     const userId = user?.id || "anonymous";
     fetch(
