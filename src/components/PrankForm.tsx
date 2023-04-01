@@ -60,9 +60,6 @@ const PrankForm = ({
     if (from_phone && !from_phone.startsWith("+")) {
       from_phone = "+" + from_phone;
     }
-    if (!from_phone && !anonymous) {
-      return failInitiateCall();
-    }
     from_phone && (await maybeWriteToSupabase(from_phone));
     const userId = session?.user?.id;
     if (from_phone) {
