@@ -4,6 +4,7 @@ import { HStack, VStack, Text, Box, Center } from "@chakra-ui/layout";
 import { Button, Checkbox, Select, Spinner, Textarea } from "@chakra-ui/react";
 import { SessionContext } from "../helpers/SessionContext";
 import { isCallerIdVerified, VerificationType } from "../helpers/verification";
+import { supabase } from "../services/supabase";
 
 export type InitiateChatResponse = {
   success: boolean;
@@ -29,13 +30,32 @@ const PrankForm = ({
     onInitiateChatResponse({ success: false });
   };
 
-  const initiateCall = (
+  const maybeWriteToSupabase = async (from_phone: string) => {
+    const userId = session?.user?.id;
+    if (!userId) {
+      return;
+    }
+    const res = await supabase
+      .from("phoneNumbers")
+      .select("*")
+      .eq("user", userId);
+
+    if (res.error) {
+      console.error(res.error);
+    } else if (res.data?.length === 0) {
+      await supabase
+        .from("phoneNumbers")
+        .insert([{ user: userId, phoneNumber: from_phone }]);
+    }
+  };
+
+  const initiateCall = async (
     to_phone: string,
     from_phone: string | undefined,
     prompt: string,
     anonymous: boolean,
     voice: string
-  ): void => {
+  ) => {
     setCallLoading(true);
     if (from_phone && !from_phone.startsWith("+")) {
       from_phone = "+" + from_phone;
@@ -43,6 +63,7 @@ const PrankForm = ({
     if (!from_phone && !anonymous) {
       return failInitiateCall();
     }
+    from_phone && (await maybeWriteToSupabase(from_phone));
     const userId = session?.user?.id;
     if (from_phone) {
       isCallerIdVerified(from_phone!).then((verified) => {
@@ -90,6 +111,7 @@ const PrankForm = ({
         } else {
           const data = await response.json();
           alert(data.error);
+          setCallLoading(false);
           throw new Error(data.error);
         }
       })
@@ -142,16 +164,16 @@ const PrankForm = ({
             minWidth={"225px"}
             padding="10px"
             colorScheme="blue"
-            onClick={() =>
+            onClick={async () => {
               // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-              initiateCall(
+              await initiateCall(
                 receiverPhoneNumber,
                 session?.user.phone,
                 prompt,
                 anonymous,
                 voice
-              )
-            }
+              );
+            }}
           >
             {callLoading && (
               <>
