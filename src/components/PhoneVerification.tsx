@@ -21,12 +21,14 @@ const PhoneVerification = ({
   phoneNumber,
   verificationType,
   setShowVerificationScreen,
-  turnstileToken,
+  captchaToken,
+  captchaRef,
 }: {
   phoneNumber: string;
   verificationType: VerificationType;
   setShowVerificationScreen: (showVerificationScreen: boolean) => void;
-  turnstileToken: string;
+  captchaToken: string;
+  captchaRef: React.RefObject<any>;
 }) => {
   const [verificationCode, setVerificationCode] = React.useState("");
   const [isCallerIdVerification, setIsCallerIdVerification] =
@@ -34,26 +36,23 @@ const PhoneVerification = ({
   const [isNormalVerification, setIsNormalVerification] = React.useState(false);
 
   const signInWithOtp = (phoneNumber: string) => {
-    fetch(process.env.REACT_APP_OTP_API_URL || "", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        phoneNumber,
-        token: turnstileToken,
-      }),
-    }).then((response) => {
-      console.log(response);
-      if (!response.ok) {
-        response.json().then((data) => {
-          alert(data.errorDetail);
-        });
-        setShowVerificationScreen(false);
-      } else {
-        setIsNormalVerification(true);
-      }
-    });
+    supabase.auth
+      .signInWithOtp({
+        phone: phoneNumber,
+        options: {
+          captchaToken,
+        },
+      })
+      .then(({ data, error }) => {
+        if (error) {
+          alert(error.message);
+          setShowVerificationScreen(false);
+        } else {
+          setIsNormalVerification(true);
+        }
+        // @ts-ignore
+        captchaRef.current?.resetCaptcha();
+      });
   };
 
   React.useEffect(() => {

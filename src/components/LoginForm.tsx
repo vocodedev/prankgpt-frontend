@@ -3,13 +3,14 @@ import React from "react";
 import { HStack, VStack, Text } from "@chakra-ui/layout";
 import { Button } from "@chakra-ui/react";
 import { VerificationType } from "../helpers/verification";
-import { Turnstile } from "@marsidev/react-turnstile";
+import HCaptcha from "@hcaptcha/react-hcaptcha";
 
 interface LoginFormProps {
   verificationType: VerificationType;
   phoneNumber: string;
   setPhoneNumber: (phoneNumber: string) => void;
-  setTurnstileToken: (turnstileToken: string) => void;
+  setCaptchaToken: (captchaToken: string) => void;
+  captchaRef: React.RefObject<any>;
   onSubmit: (event: any) => void;
 }
 
@@ -17,7 +18,8 @@ const LoginForm: React.FC<LoginFormProps> = ({
   verificationType,
   phoneNumber,
   setPhoneNumber,
-  setTurnstileToken,
+  setCaptchaToken,
+  captchaRef,
   onSubmit,
 }) => {
   return (
@@ -38,9 +40,10 @@ const LoginForm: React.FC<LoginFormProps> = ({
             />
             <Button type="submit">Enter</Button>
           </HStack>
-          <Turnstile
-            siteKey="0x4AAAAAAADrF_jhtIyvB4E5"
-            onSuccess={setTurnstileToken}
+          <HCaptcha
+            ref={captchaRef}
+            sitekey={process.env.REACT_APP_HCAPTCHA_SITE_KEY || ""}
+            onVerify={(token) => setCaptchaToken(token)}
           />
         </VStack>
       </form>

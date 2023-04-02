@@ -16,7 +16,8 @@ const Login = ({
   const { session } = React.useContext(SessionContext);
   const [showVerificationScreen, setShowVerificationScreen] =
     React.useState(false);
-  const [turnstileToken, setTurnstileToken] = React.useState<string>("");
+  const [captchaToken, setCaptchaToken] = React.useState<string>("");
+  const captchaRef = React.useRef();
 
   React.useEffect(() => {
     if (verificationType === "normal" && session?.user) {
@@ -35,7 +36,8 @@ const Login = ({
         verificationType={verificationType}
         phoneNumber={phoneNumber}
         setShowVerificationScreen={setShowVerificationScreen}
-        turnstileToken={turnstileToken}
+        captchaToken={captchaToken}
+        captchaRef={captchaRef}
       />
     );
   } else {
@@ -44,7 +46,8 @@ const Login = ({
         verificationType={verificationType}
         phoneNumber={phoneNumber}
         setPhoneNumber={setPhoneNumber}
-        setTurnstileToken={setTurnstileToken}
+        setCaptchaToken={setCaptchaToken}
+        captchaRef={captchaRef}
         onSubmit={onLoginFormSubmit}
       />
     );
