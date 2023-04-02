@@ -16,6 +16,7 @@ const Login = ({
   const { session } = React.useContext(SessionContext);
   const [showVerificationScreen, setShowVerificationScreen] =
     React.useState(false);
+  const [turnstileToken, setTurnstileToken] = React.useState<string>("");
 
   React.useEffect(() => {
     if (verificationType === "normal" && session?.user) {
@@ -23,7 +24,10 @@ const Login = ({
     }
   }, [session]);
 
-  const onLoginFormSubmit = () => setShowVerificationScreen(true);
+  const onLoginFormSubmit = (event: SubmitEvent) => {
+    event.preventDefault();
+    setShowVerificationScreen(true);
+  };
 
   if (showVerificationScreen) {
     return (
@@ -31,6 +35,7 @@ const Login = ({
         verificationType={verificationType}
         phoneNumber={phoneNumber}
         setShowVerificationScreen={setShowVerificationScreen}
+        turnstileToken={turnstileToken}
       />
     );
   } else {
@@ -39,6 +44,7 @@ const Login = ({
         verificationType={verificationType}
         phoneNumber={phoneNumber}
         setPhoneNumber={setPhoneNumber}
+        setTurnstileToken={setTurnstileToken}
         onSubmit={onLoginFormSubmit}
       />
     );

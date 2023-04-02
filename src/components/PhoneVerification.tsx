@@ -21,10 +21,12 @@ const PhoneVerification = ({
   phoneNumber,
   verificationType,
   setShowVerificationScreen,
+  turnstileToken,
 }: {
   phoneNumber: string;
   verificationType: VerificationType;
   setShowVerificationScreen: (showVerificationScreen: boolean) => void;
+  turnstileToken: string;
 }) => {
   const [verificationCode, setVerificationCode] = React.useState("");
   const [isCallerIdVerification, setIsCallerIdVerification] =
@@ -32,13 +34,23 @@ const PhoneVerification = ({
   const [isNormalVerification, setIsNormalVerification] = React.useState(false);
 
   const signInWithOtp = (phoneNumber: string) => {
-    supabase.auth
-      .signInWithOtp({
-        phone: phoneNumber,
-      })
-      .then((error) => {
+    fetch(process.env.REACT_APP_OTP_API_URL || "", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        phoneNumber,
+        token: turnstileToken,
+      }),
+    }).then((response) => {
+      console.log(response);
+      if (!response.ok) {
+        setShowVerificationScreen(false);
+      } else {
         setIsNormalVerification(true);
-      });
+      }
+    });
   };
 
   React.useEffect(() => {

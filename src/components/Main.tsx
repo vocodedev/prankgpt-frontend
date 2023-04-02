@@ -101,7 +101,7 @@ const Main: React.FC = () => {
                   <img
                     src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=386990&theme=light"
                     alt="PrankGPT - Prank&#0032;call&#0032;your&#0032;friends&#0032;with&#0032;an&#0032;AI&#0032;that&#0032;can&#0032;say&#0032;anything | Product Hunt"
-                    style={{ width: "125px", height: "27px;" }}
+                    style={{ width: "125px", height: "27px" }}
                     width="125"
                     height="27"
                   />
@@ -114,7 +114,7 @@ const Main: React.FC = () => {
                   <img
                     src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=386990&theme=dark"
                     alt="PrankGPT - Prank&#0032;call&#0032;your&#0032;friends&#0032;with&#0032;an&#0032;AI&#0032;that&#0032;can&#0032;say&#0032;anything | Product Hunt"
-                    style={{ width: "125px", height: "27px;" }}
+                    style={{ width: "125px", height: "27px" }}
                     width="125"
                     height="27"
                   />
