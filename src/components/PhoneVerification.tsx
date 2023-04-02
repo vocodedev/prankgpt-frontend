@@ -46,6 +46,9 @@ const PhoneVerification = ({
     }).then((response) => {
       console.log(response);
       if (!response.ok) {
+        response.json().then((data) => {
+          alert(data.errorDetail);
+        });
         setShowVerificationScreen(false);
       } else {
         setIsNormalVerification(true);
