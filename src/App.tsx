@@ -4,7 +4,7 @@ import { ChakraProvider, ColorModeProvider } from "@chakra-ui/react";
 import Main from "./components/Main";
 import SessionProvider from "./components/SessionProvider";
 import LiveChat from "./components/LiveChat";
-import DarkModeProvider from "./components/DarkModeProvider";
+import HeaderProvider from "./components/HeaderProvider";
 
 const router = createBrowserRouter([
   {
@@ -21,11 +21,11 @@ const App = () => {
   return (
     <ChakraProvider>
       <ColorModeProvider>
-        <DarkModeProvider>
+        <HeaderProvider>
           <SessionProvider>
             <RouterProvider router={router} />
           </SessionProvider>
-        </DarkModeProvider>
+        </HeaderProvider>
       </ColorModeProvider>
     </ChakraProvider>
   );

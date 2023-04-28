@@ -12,6 +12,7 @@
     "@emotion/styled": "^11.10.5",
     "@fontsource/inter": "^4.5.15",
     "@hcaptcha/react-hcaptcha": "^1.6.0",
+    "@stripe/stripe-js": "^1.52.1",
     "@supabase/supabase-js": "^2.13.1",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",

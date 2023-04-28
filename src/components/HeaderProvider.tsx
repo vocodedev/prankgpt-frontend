@@ -2,12 +2,14 @@ import {
   Box,
   Flex,
   FormControl,
+  HStack,
   Spacer,
   Switch,
   useColorMode,
 } from "@chakra-ui/react";
+import CoffeeButton from "./CoffeeButton";
 
-const DarkModeProvider = (props: any) => {
+const HeaderProvider = (props: any) => {
   const { colorMode, toggleColorMode } = useColorMode();
   return (
     <>
@@ -16,10 +18,13 @@ const DarkModeProvider = (props: any) => {
           <Spacer />
           <Box>
             <FormControl display="flex" alignItems="center">
-              <Switch
-                onChange={toggleColorMode}
-                isChecked={colorMode === "dark"}
-              />
+              <HStack>
+                <CoffeeButton />
+                <Switch
+                  onChange={toggleColorMode}
+                  isChecked={colorMode === "dark"}
+                />
+              </HStack>
             </FormControl>
           </Box>
         </Flex>
@@ -29,4 +34,4 @@ const DarkModeProvider = (props: any) => {
   );
 };
 
-export default DarkModeProvider;
+export default HeaderProvider;
