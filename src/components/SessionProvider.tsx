@@ -5,7 +5,7 @@ import { supabase } from "../services/supabase";
 import { SessionContextType } from "../helpers/SessionContext";
 import { useToast } from "@chakra-ui/react";
 
-const UserProvider = (props: any) => {
+const SessionProvider = (props: any) => {
   const [session, setSession] = React.useState<Session | null>(null);
   const toast = useToast();
 
@@ -34,4 +34,4 @@ const UserProvider = (props: any) => {
   );
 };
 
-export default UserProvider;
+export default SessionProvider;

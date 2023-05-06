@@ -11,7 +11,7 @@ const CoffeeButton = () => {
   const handleClick = async () => {
     const stripe = await stripePromise;
     const response = await fetch(
-      `https://${process.env.REACT_APP_BACKEND_URL}/create-checkout-session`,
+      `https://${process.env.REACT_APP_BACKEND_URL}/buy-coffee-checkout-session`,
       {
         method: "POST",
         headers: {

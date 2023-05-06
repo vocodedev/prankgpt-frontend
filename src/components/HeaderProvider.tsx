@@ -8,22 +8,28 @@ import {
   useColorMode,
 } from "@chakra-ui/react";
 import CoffeeButton from "./CoffeeButton";
+import Profile from "./Profile";
+import React from "react";
+import { SessionContext } from "../helpers/SessionContext";
 
 const HeaderProvider = (props: any) => {
   const { colorMode, toggleColorMode } = useColorMode();
+  const { session } = React.useContext(SessionContext);
   return (
     <>
       <header>
-        <Flex p={2} w="100%" justify={"flex-end"}>
+        <Flex p={2} justify={"flex-end"}>
           <Spacer />
           <Box>
             <FormControl display="flex" alignItems="center">
               <HStack>
-                <CoffeeButton />
-                <Switch
-                  onChange={toggleColorMode}
-                  isChecked={colorMode === "dark"}
-                />
+                {<Profile />}
+                <Box padding="10px">
+                  <Switch
+                    onChange={toggleColorMode}
+                    isChecked={colorMode === "dark"}
+                  />
+                </Box>
               </HStack>
             </FormControl>
           </Box>

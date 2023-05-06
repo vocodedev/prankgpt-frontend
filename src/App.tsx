@@ -21,11 +21,11 @@ const App = () => {
   return (
     <ChakraProvider>
       <ColorModeProvider>
-        <HeaderProvider>
-          <SessionProvider>
+        <SessionProvider>
+          <HeaderProvider>
             <RouterProvider router={router} />
-          </SessionProvider>
-        </HeaderProvider>
+          </HeaderProvider>
+        </SessionProvider>
       </ColorModeProvider>
     </ChakraProvider>
   );
