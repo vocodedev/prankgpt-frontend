@@ -6,6 +6,7 @@ import { SessionContext } from "../helpers/SessionContext";
 import { isCallerIdVerified, VerificationType } from "../helpers/verification";
 import { supabase } from "../services/supabase";
 import { loadStripe } from "@stripe/stripe-js";
+import { createSubscription } from "../helpers/stripe";
 
 export type InitiateChatResponse = {
   success: boolean;
@@ -47,32 +48,6 @@ const PrankForm = ({
       await supabase
         .from("phoneNumbers")
         .insert([{ user: userId, phoneNumber: from_phone }]);
-    }
-  };
-
-  const createSubscription = async (userPhoneNumber: string) => {
-    const stripe = await loadStripe(
-      process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY || ""
-    );
-    const response = await fetch(
-      `https://${process.env.REACT_APP_BACKEND_URL}/buy-subscription-checkout-session`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          phone_number: userPhoneNumber,
-        }),
-      }
-    );
-    const session = await response.json();
-    const result = await stripe?.redirectToCheckout({
-      sessionId: session.id,
-    });
-
-    if (result?.error) {
-      console.error("Error redirecting to checkout:", result.error.message);
     }
   };
 

@@ -11,10 +11,15 @@ import {
   ModalBody,
   Text,
   Stack,
+  Button,
+  HStack,
+  Spacer,
+  useToast,
 } from "@chakra-ui/react";
 
 import { FaUser } from "react-icons/fa";
 import { SessionContext } from "../helpers/SessionContext";
+import { cancelSubscription, createSubscription } from "../helpers/stripe";
 
 const formatMinutes = (minutesDecimal: number) => {
   let totalSeconds = minutesDecimal * 60;
@@ -28,6 +33,11 @@ const formatMinutes = (minutesDecimal: number) => {
   return `${minutesFmtd}:${secondsFmtd}`;
 };
 
+const formatEpoch = (epochSeconds: number): string => {
+  const date = new Date(epochSeconds * 1000); // Convert to milliseconds by multiplying by 1000
+  return date.toLocaleString(); // returns a string in human-readable format
+};
+
 const Profile = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { session } = React.useContext(SessionContext);
@@ -35,6 +45,9 @@ const Profile = () => {
   const [totalConversationMinutes, setTotalConversationMinutes] =
     React.useState();
   const [freeTrialLimitMinutes, setFreeTrialLimitMinutes] = React.useState();
+  const [subscriptionEnd, setSubscriptionEnd] = React.useState();
+  const [cancelledAtPeriodEnd, setCancelledAtPeriodEnd] = React.useState();
+  const toast = useToast();
 
   React.useEffect(() => {
     if (!session?.user) {
@@ -54,8 +67,22 @@ const Profile = () => {
         setTotalConversationMinutes(data.total_conversation_minutes);
         setFreeTrialLimitMinutes(data.free_trial_limit_minutes);
         setHasPaid(data.has_paid);
+        setSubscriptionEnd(data.subscription_end);
+        setCancelledAtPeriodEnd(data.cancelled_at_period_end);
       });
   });
+
+  const onUnsubscribe = async () => {
+    const success = await cancelSubscription(`+${session?.user.phone}`);
+    if (success) {
+      toast({
+        title: "You have been unsubscribed.",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
+    }
+  };
 
   return (
     <Box>
@@ -96,9 +123,47 @@ const Profile = () => {
                     Subscription
                   </Text>
                   <Text fontSize="lg" color={hasPaid ? "green.500" : "red.500"}>
-                    {hasPaid
-                      ? "Active"
-                      : `Free Trial (${freeTrialLimitMinutes} minutes)`}
+                    {hasPaid ? (
+                      <HStack>
+                        {cancelledAtPeriodEnd ? (
+                          <Text>
+                            active until {formatEpoch(subscriptionEnd || 0)}
+                          </Text>
+                        ) : (
+                          <Text>active</Text>
+                        )}
+                        <Spacer />
+                        {!cancelledAtPeriodEnd && (
+                          <Button
+                            fontWeight={"light"}
+                            fontSize={"sm"}
+                            variant="link"
+                            textColor={"gray.600"}
+                            onClick={onUnsubscribe}
+                          >
+                            unsubscribe
+                          </Button>
+                        )}
+                      </HStack>
+                    ) : (
+                      <HStack>
+                        <Text>
+                          {`free trial (${freeTrialLimitMinutes} minutes)`}
+                        </Text>
+                        <Spacer />
+                        <Button
+                          fontWeight={"light"}
+                          fontSize={"sm"}
+                          variant="link"
+                          textColor={"gray.600"}
+                          onClick={() =>
+                            createSubscription(`+${session?.user.phone}`)
+                          }
+                        >
+                          subscribe
+                        </Button>
+                      </HStack>
+                    )}
                   </Text>
                 </Box>
               </Stack>
